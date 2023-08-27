@@ -4,13 +4,13 @@ import cors from 'cors'
 import helmet from 'helmet'
 import compression from 'compression'
 import morgan from 'morgan'
+import mongoose from 'mongoose'
 
 dotenv.config()
 
 const app = express()
 
-const {PORT} = process.env
-const port = PORT || 2100;
+const port = process.env.PORT || 2100;
 
 
 app.use(express.json())
@@ -30,10 +30,26 @@ app.get('/', ()=> {
     console.log('Servidor de Blockchain Baron en marcha')
 })
 
+const connection = async () => {
+    try {
+      await mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+      console.log('Connected to MongoDB');
+    } catch (error) {
+      console.log('Failed to connect to MongoDB:', error.message);
+      throw error;
+    }
+};
+
 const startServer = async () => {
-    app.listen(port, () => {
-    console.log(`Servidor de Blockchain Baron corriendo en http://localhost:${port} 🔥🎮`)
-})
+    try{
+        await connection()
+        app.listen(port, () => {
+        console.log(`Servidor de Blockchain Baron corriendo en http://localhost:${port} 🔥🎮`)
+        })
+    } catch (error) {
+
+    }
+
 }
 
 startServer()
