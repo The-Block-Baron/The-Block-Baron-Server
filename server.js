@@ -1,24 +1,24 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import cors from 'cors'
-import helmet from 'helmet'
-import compression from 'compression'
-import morgan from 'morgan'
-import mongoose from 'mongoose'
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import helmet from 'helmet';
+import compression from 'compression';
+import morgan from 'morgan';
+import mongoose from 'mongoose';
 
-dotenv.config()
+dotenv.config();
 
-const app = express()
+const app = express();
+const { PORT, CONNECTION_URI } = process.env;
+const port = PORT || 2100;
 
-const port = process.env.PORT || 2100;
-
-
-app.use(express.json())
+// Middleware
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(helmet())
-app.use(cors())
-app.use(compression())
-app.use(morgan('dev'))
+app.use(helmet());
+app.use(cors());
+app.use(compression());
+app.use(morgan('dev'));
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -26,30 +26,48 @@ app.use((err, req, res, next) => {
 });
 
 
-app.get('/', ()=> {
-    console.log('Servidor de Blockchain Baron en marcha')
-})
+// Endpoint básico
+app.get('/', () => {
+    console.log('Servidor de Blockchain Baron en marcha');
+});
+
+// Middleware para manejar 404
+app.use((req, res, next) => {
+    res.status(404).send('Página no encontrada.');
+});
 
 const connection = async () => {
     try {
-      await mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-      console.log('Connected to MongoDB');
+        await mongoose.connect(CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+        console.log('Connected to MongoDB');
     } catch (error) {
-      console.log('Failed to connect to MongoDB:', error.message);
-      throw error;
+        console.log('Failed to connect to MongoDB:', error.message);
+        throw error;
     }
 };
 
 const startServer = async () => {
-    try{
-        await connection()
+    try {
+        await connection();
         app.listen(port, () => {
-        console.log(`Servidor de Blockchain Baron corriendo en http://localhost:${port} 🔥🎮`)
-        })
+            console.log(`Servidor de Blockchain Baron corriendo en http://localhost:${port} 🔥🎮`);
+        });
     } catch (error) {
-
+        console.error('Error al iniciar el servidor:', error.message);
     }
+};
 
-}
+startServer();
 
-startServer()
+// Manejadores para cerrar la conexión correctamente
+process.on('SIGTERM', () => {
+    mongoose.connection.close();
+    console.log('Conexión a MongoDB cerrada.');
+    process.exit(0);
+});
+
+process.on('SIGINT', () => {
+    mongoose.connection.close();
+    console.log('Conexión a MongoDB cerrada.');
+    process.exit(0);
+});
