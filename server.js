@@ -57,7 +57,7 @@ const startServer = async () => {
     }
 };
 
-startServer();
+
 
 // Manejadores para cerrar la conexión correctamente
 process.on('SIGTERM', () => {
@@ -71,3 +71,5 @@ process.on('SIGINT', () => {
     console.log('Conexión a MongoDB cerrada.');
     process.exit(0);
 });
+
+startServer();
