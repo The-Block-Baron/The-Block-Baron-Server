@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
+import isEmail from 'validator/lib/isEmail';
 
-import { nftSchema } from './nft.model';
+
+import { NFT } from './nft.model';
 
 const Schema = mongoose.Schema;
 
@@ -17,14 +19,19 @@ const playerSchema = new Schema({
         unique: true, 
         required: true 
     },
-
     email: {
         type: String,
         required: true,
         unique: true,
         trim: true,
-        match: [/.+@.+\..+/, 'Por favor ingrese una dirección de email válida']  // Validación simple de formato de email.
-    },
+        validate: {
+            validator: (value) => {
+                return isEmail(value);
+            },
+            message: 'Por favor ingrese una dirección de email válida'
+        }
+    }
+    ,
     password: {
         type: String,
         required: true,
@@ -36,11 +43,11 @@ const playerSchema = new Schema({
     },
     nfts: [{
         type: Schema.Types.ObjectId,
-        ref: nftSchema
+        ref: "NFT"
     }],
     avatar: {
         type: Schema.Types.ObjectId,
-        ref: nftSchema  
+        ref: "NFT"  
     },
     dateCreated: {
         type: Date,
@@ -60,7 +67,7 @@ const playerSchema = new Schema({
     }],
 });
 
-playerSchemaSchema.index({ username: 1, walletAddress: 1, email: 1 });
+playerSchema.index({ username: 1, walletAddress: 1, email: 1 });
 
 const Player = mongoose.model('Player', playerSchema);
 export default Player;
