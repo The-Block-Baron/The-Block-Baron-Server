@@ -1,52 +1,42 @@
-// import mongoose from 'mongoose';
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
 
-// const Schema = mongoose.Schema;
+const economicActSchema = new Schema({
+  type: {
+    type: String,
+    enum: ['create', 'improve', 'sabotage', 'deal'],
+    required: true
+  },
+  player: {
+    type: Schema.Types.ObjectId,
+    ref: 'Player',
+    required: true
+  },
+  targetCompany: {
+    type: Schema.Types.ObjectId,
+    ref: 'Company', // referencia al modelo de empresa
+    required: true
+  },
+  sabotageTarget: {
+    type: Schema.Types.ObjectId,
+    ref: 'Player', // Este es el objetivo del sabotaje, sólo necesario si el tipo es 'sabotage'
+  },
+  improvementType: {
+    type: String,
+    enum: ['Type1', 'Type2', 'Type3', 'Type4', 'Type5'],
+  },
+  dealEffect: {
+    type: Number, // un número entre -50 y 100
+  },
+  sabotageEffect: {
+    type: Number, // un número entre 0 y -60
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+});
 
-// const ActivityTypes = ['create', 'improve', 'sabotage', 'deal'];
-// const CompanyTypes = ['Agriculture', 'Livestock', 'Retail', 'Restaurants', 'Bars', 'ClothingBrands', 'Hotels', 'HealthCare', 'Mining', 'Nightclubs', 'Automobiles', 'Technology', 'Finance', 'RealEstate'];
+const EconomicAct = mongoose.model('EconomicAct', economicActSchema);
 
-// const economicActivitySchema = new Schema({
-//     type: {
-//         type: String,
-//         enum: ActivityTypes,
-//         required: true
-//     },
-//     companyType: {
-//         type: String,
-//         enum: CompanyTypes,
-//         required: function() {
-//             return this.type === 'create';  // Solo necesario si la actividad es de tipo 'create'
-//         }
-//     },
-//     level: {
-//         type: Number,
-//         min: 1,
-//         max: 5,
-//         required: function() {
-//             return this.type === 'improve';  // Solo necesario si la actividad es de tipo 'improve'
-//         }
-//     },
-//     sabotageDetail: {
-//         type: String,
-//         required: function() {
-//             return this.type === 'sabotage';  // Solo necesario si la actividad es de tipo 'sabotage'
-//         }
-//     },
-//     dealDetail: {
-//         type: String,
-//         required: function() {
-//             return this.type === 'deal';  // Solo necesario si la actividad es de tipo 'deal'
-//         }
-//     },
-//     player: {
-//         type: Schema.Types.ObjectId,
-//         ref: 'Player',
-//         required: true
-//     },
-//     date: {
-//         type: Date,
-//         default: Date.now
-//     }
-// });
-
-// export const EconomicActivity = mongoose.model('EconomicActivity', economicActivitySchema);
+export default EconomicAct;

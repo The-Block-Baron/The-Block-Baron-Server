@@ -38,14 +38,6 @@ const stateSchema = new Schema({
       ref: 'Company'
     }]
   }],
-  isActive: {
-    type: Boolean,
-    default: true
-  },
-  dateCreated: {
-    type: Date,
-    default: Date.now
-  }
 });
 
 const State = mongoose.model('State', stateSchema);
