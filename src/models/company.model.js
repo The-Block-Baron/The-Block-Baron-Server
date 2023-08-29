@@ -28,6 +28,10 @@ const companySchema = new Schema({
   dateCreated: {
     type: Date,
     default: Date.now
+  },
+  state: {  
+    type: Schema.Types.ObjectId,
+    ref: 'State'
   }
 });
 
