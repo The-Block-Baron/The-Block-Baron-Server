@@ -24,7 +24,7 @@ const playerSchema = new Schema({
     },
     economicActivities: [{
         type: Schema.Types.ObjectId,
-        ref: 'EconomicActivity'
+        ref: 'EconomicAct'
     }],
 });
 

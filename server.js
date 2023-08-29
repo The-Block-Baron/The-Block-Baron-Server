@@ -6,6 +6,8 @@ import compression from 'compression';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 
+import playerRoutes from './src/routes/player.routes.js'
+
 dotenv.config();
 
 const app = express();
@@ -30,6 +32,8 @@ app.use((err, req, res, next) => {
 app.get('/', () => {
     console.log('Servidor de Blockchain Baron en marcha');
 });
+
+app.use('/api/v1', playerRoutes)
 
 // Middleware para manejar 404
 app.use((req, res, next) => {

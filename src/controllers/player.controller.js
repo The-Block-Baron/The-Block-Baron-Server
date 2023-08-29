@@ -1,7 +1,8 @@
-import Player from './models/player.model';
+import Player from '../models/player.model.js';
+import EconomicAct from '../models/economicAct.model.js';
 
 
-const createPlayer = async (req, res) => {
+export const createPlayer = async (req, res) => {
   try {
     const newPlayer = new Player(req.body);
     await newPlayer.save();
@@ -12,7 +13,7 @@ const createPlayer = async (req, res) => {
 };
 
 
-const updatePlayer = async (req, res) => {
+export const updatePlayer = async (req, res) => {
   try {
     const player = await Player.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!player) {
@@ -25,7 +26,7 @@ const updatePlayer = async (req, res) => {
 };
 
 
-const deletePlayer = async (req, res) => {
+export const deletePlayer = async (req, res) => {
   try {
     const player = await Player.findByIdAndDelete(req.params.id);
     if (!player) {
@@ -50,7 +51,7 @@ export const getPlayer = async (req, res) => {
   };
   
 
-export const getActivePlayers = async (req, res) => {
+  export const getActivePlayers = async (req, res) => {
     try {
       const activePlayers = await Player.find({ isActive: true });
       res.status(200).json(activePlayers);
@@ -60,7 +61,7 @@ export const getActivePlayers = async (req, res) => {
   };
   
 
-export const toggleAllPlayersStatus = async (req, res) => {
+  export const toggleAllPlayersStatus = async (req, res) => {
     try {
       const players = await Player.find({});
       for (const player of players) {
@@ -73,12 +74,3 @@ export const toggleAllPlayersStatus = async (req, res) => {
     }
   };
 
-
-export {
-  createPlayer,
-  updatePlayer,
-  deletePlayer,
-  getActivePlayers,
-  toggleAllPlayersStatus,
-  getPlayer
-};
