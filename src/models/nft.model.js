@@ -25,34 +25,34 @@ const Schema = mongoose.Schema;
 nftSchema.pre('save', function (next) {
     switch (this.rarity) {
         case 'Intern':
-            this.incomePerHour = 500;
+            this.incomePerHour = 100;
             break;
         case 'Trainee':
-            this.incomePerHour = 1000;
+            this.incomePerHour = 200;
             break;
         case 'Junior':
-            this.incomePerHour = 1500;
+            this.incomePerHour = 400;
             break;
         case 'Associate':
-            this.incomePerHour = 2000;
+            this.incomePerHour = 600;
             break;
         case 'Specialist':
-            this.incomePerHour = 2500;
+            this.incomePerHour = 800;
             break;
         case 'Manager':
-            this.incomePerHour = 3000;
+            this.incomePerHour = 1000;
             break;
         case 'Senior Manager':
-            this.incomePerHour = 3500;
+            this.incomePerHour = 1200;
             break;
         case 'Director':
-            this.incomePerHour = 4000;
+            this.incomePerHour = 1400;
             break;
         case 'Vice President':
-            this.incomePerHour = 4500;
+            this.incomePerHour = 1600;
             break;
         case 'CEO':
-            this.incomePerHour = 5000;
+            this.incomePerHour = 2000;
             break;
         default:
             break;
