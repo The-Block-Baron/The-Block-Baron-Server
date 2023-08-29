@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import EconomicAct from './economicAct.model.js';
+
 const Schema = mongoose.Schema;
 
 const playerSchema = new Schema({
@@ -13,6 +15,7 @@ const playerSchema = new Schema({
     income: {
         type: Number,
         default: 200, 
+        min: 0
     },
     inGameTokens: {
         type: Number,
