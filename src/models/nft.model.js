@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
-const nftSchema = new Schema({
+export const nftSchema = new Schema({
     tokenId: {
         type: String,
         required: true,
@@ -61,68 +61,3 @@ nftSchema.pre('save', function (next) {
 });
 
 const NFT = mongoose.model('NFT', nftSchema);
-
-
-
-const userSchema = new Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        minlength: 3
-    },
-    walletAddress: { 
-        type: String, 
-        unique: true, 
-        required: true 
-    },
-
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        match: [/.+@.+\..+/, 'Por favor ingrese una dirección de email válida']  // Validación simple de formato de email.
-    },
-    password: {
-        type: String,
-        required: true,
-        minlength: 8  // De nuevo, considera usar bcrypt para encriptar las contraseñas.
-    },
-    inGameTokens: {
-        type: Number,
-        default: 0
-    },
-    nfts: [{
-        type: Schema.Types.ObjectId,
-        ref: 'NFT'
-    }],
-    avatar: {
-        type: Schema.Types.ObjectId,
-        ref: 'NFT'  // Suponemos que el avatar es un tipo de NFT que el usuario posee.
-    },
-    dateCreated: {
-        type: Date,
-        default: Date.now
-    },
-    isActive: {
-        type: Boolean,
-        default: true
-    },
-    transactions: [{
-        type: Schema.Types.ObjectId, 
-        ref: 'Transaction'
-    }],
-    economicActivities: [{
-        type: Schema.Types.ObjectId,
-        ref: 'EconomicActivity'
-    }],
-});
-
-userSchema.index({ username: 1, walletAddress: 1, email: 1 });
-
-const User = mongoose.model('User', userSchema);
-export default User;
-
-
