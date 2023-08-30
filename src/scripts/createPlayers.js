@@ -15,7 +15,7 @@ const seedDB = async () =>{
       { username: 'Psylow', income: 200, inGameTokens: 200 },
       { username: 'Kriptonix', income: 200, inGameTokens: 100 },
       { username: 'Zypher', income: 200, inGameTokens: 50 },
-      { username: '4L13N D3M0N', income: 200, inGameTokens: 25 }
+      { username: 'Perriqui', income: 200, inGameTokens: 25 }
     ];
 
     // Clear existing players

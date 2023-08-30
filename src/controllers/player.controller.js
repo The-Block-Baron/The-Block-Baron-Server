@@ -1,5 +1,6 @@
 import Player from '../models/player.model.js';
 import EconomicAct from '../models/economicAct.model.js';
+import Company from '../models/company.model.js';
 
 
 export const createPlayer = async (req, res) => {
@@ -71,41 +72,58 @@ export const updatePlayer = async (req, res) => {
 
 
 export const deletePlayer = async (req, res) => {
-    try {
-      const player = await Player.findById(req.params.id);
+  try {
+      const playerId = req.params.id;
+
+      // Encuentra el jugador por su ID
+      const player = await Player.findById(playerId);
+
       if (!player) {
-        return res.status(404).json({ error: 'Jugador no encontrado' });
+          return res.status(404).json({ error: 'Jugador no encontrado' });
       }
 
-      await player.remove();
-  
-      res.status(200).json({ message: 'Jugador eliminado exitosamente' });
-    } catch (error) {
-      if (error.name === 'CastError') {
-        res.status(400).json({ error: 'ID de jugador inválido' });
-      } else {
-        res.status(500).json({ error: 'Error del servidor al eliminar el jugador' });
-      }
+      // Elimina todas las actividades económicas asociadas con el jugador
+      await EconomicAct.deleteMany({ player: playerId });
+
+      // Elimina todas las compañías asociadas con el jugador
+      await Company.deleteMany({ ownerId: playerId });
+
+      // Finalmente, elimina al jugador
+      await Player.deleteOne({ _id: playerId });
+
+      res.status(200).json({ message: 'Jugador y todas las entidades asociadas eliminadas exitosamente' });
+  } catch (error) {
+      console.error(error); // Para depuración
+      res.status(500).json({ error: 'Error del servidor al eliminar el jugador y entidades asociadas' });
+  }
+};
+
+
+export const getPlayer = async (req, res) => {
+  try {
+    const player = await Player.findById(req.params.id)
+                                .populate({
+                                  path: 'Companies',
+                                  populate: { path: 'state' }
+                                });
+    
+    if (!player) {
+      return res.status(404).json({ error: 'Jugador no encontrado' });
     }
-  };
-  
-
-
-  export const getPlayer = async (req, res) => {
-    try {
-      const player = await Player.findById(req.params.id).populate('economicActivities');
-      if (!player) {
-        return res.status(404).json({ error: 'Jugador no encontrado' });
-      }
-      res.status(200).json(player);
-    } catch (error) {
-      if (error.name === 'CastError') {
-        res.status(400).json({ error: 'ID de jugador inválido' });
-      } else {
-        res.status(500).json({ error: 'Error del servidor al obtener el jugador' });
-      }
+    
+    res.status(200).json(player);
+  } catch (error) {
+    console.error(error); // Imprime el error
+    
+    if (error.name === 'CastError') {
+      res.status(400).json({ error: 'ID de jugador inválido' });
+    } else {
+      res.status(500).json({ error: 'Error del servidor al recuperar el jugador' });
     }
-  };
+  }
+};
+
+  
   
   
 
