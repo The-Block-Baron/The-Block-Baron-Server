@@ -1,37 +1,43 @@
-import mongoose from "mongoose"
-import dotenv from 'dotenv'
-import Player from "../models/player.model.js"
+import mongoose from "mongoose";
+import dotenv from 'dotenv';
+import Player from "../models/player.model.js";
+import Company from "../models/company.model.js";  // Asegúrate de importar este modelo
+import State from "../models/state.model.js";      // Asegúrate de importar este modelo
+import EconomicAct from "../models/economicAct.model.js"; // Asegúrate de importar este modelo
 
-dotenv.config()
+dotenv.config();
 
-const seedDB = async () =>{
+const seedDB = async () => {
   try {
-    // Connect to MongoDB
+    // Conectar a MongoDB
     await mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-    // Data to be added
+    // Borrar datos existentes
+    await Player.deleteMany({});
+    await Company.deleteMany({}); // Borrar todas las compañías
+    await State.updateMany({}, { $set: { companies: [] }}); // Borrar las referencias de compañías en estados
+    await EconomicAct.deleteMany({}); // Borrar todas las actividades económicas
+
+    // Datos para añadir
     const players = [
       { username: 'Dipri', income: 200, inGameTokens: 400 },
       { username: 'Psylow', income: 200, inGameTokens: 200 },
       { username: 'Kriptonix', income: 200, inGameTokens: 100 },
       { username: 'Zypher', income: 200, inGameTokens: 50 },
-      { username: '4L13N D3M0N', income: 200, inGameTokens: 25 }
+      { username: 'Perriqui', income: 200, inGameTokens: 25 }
     ];
 
-    // Clear existing players
-    await Player.deleteMany({});
-
-    // Add new players
+    // Añadir nuevos jugadores
     await Player.insertMany(players);
 
     console.log('Database seeded!');
   } catch (error) {
     console.error('Failed to seed database', error);
   } finally {
-    // Disconnect from MongoDB
+    // Desconectar de MongoDB
     mongoose.disconnect();
   }
-}
+};
 
-// Run the function
+// Ejecutar la función
 seedDB();

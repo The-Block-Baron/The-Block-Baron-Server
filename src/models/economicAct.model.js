@@ -1,4 +1,7 @@
 import mongoose from 'mongoose';
+
+import Company from './company.model.js';
+
 const Schema = mongoose.Schema;
 
 const economicActSchema = new Schema({
@@ -12,6 +15,11 @@ const economicActSchema = new Schema({
     ref: 'Player',
     required: true
   },
+  company: {
+    type: Schema.Types.ObjectId,
+    ref: 'Company', // Referencia al nuevo modelo Company
+    required: true
+  },
   improvementType: {
     type: String,
     enum: ['Type1', 'Type2', 'Type3', 'Type4'],
@@ -19,7 +27,7 @@ const economicActSchema = new Schema({
   state: {  
     type: Schema.Types.ObjectId,
     ref: 'State',
-    required: function() { return this.type === 'create'; } 
+    required: function() { return this.type === 'create'; }
   },
   createdAt: {
     type: Date,

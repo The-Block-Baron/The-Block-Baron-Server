@@ -1,14 +1,18 @@
-// Rutas y Controladores para Actividades Económicas
-// Obtener Tipos de Actividades Económicas
+import express from 'express';
+import { getEconomicActivitiesTypes, buildCompany } from '../controllers/economicAct.controller.js';
 
-// Ruta: GET /economicActivities
-// Controlador: getEconomicActivitiesTypes
-// Construir una Nueva Compañía
+const router = express.Router();
 
-// Ruta: POST /players/:id/economicActivity/build
-// Controlador: buildCompany
-// Parámetros: playerId, companyName, stateId
-// Mejorar una Compañía Existente
+// Ruta para obtener los tipos de actividades económicas y tipos de mejoras
+router.get('/economicActivities', getEconomicActivitiesTypes);
+router.post('/players/:id/economicActivity/build', buildCompany);
+
+
+// ... tus otras rutas
+
+export default router;
+
+
 
 // Ruta: PUT /players/:id/economicActivity/improve/:companyId
 // Controlador: improveCompany

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import EconomicAct from './economicAct.model.js';
+import Company from './company.model.js';
 
 const Schema = mongoose.Schema;
 
@@ -25,9 +25,9 @@ const playerSchema = new Schema({
         type: Boolean,
         default: true
     },
-    economicActivities: [{
+    Companies: [{
         type: Schema.Types.ObjectId,
-        ref: 'EconomicAct'
+        ref: 'Company'
     }],
 });
 
