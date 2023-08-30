@@ -1,79 +1,79 @@
 const companyCostAndTime = {
-    "Agriculture": {
-      buildCost: 5000,
-      buildTime: '1h',
-      upgradeCosts: [2000, 3000, 4000, 5000],
-      upgradeTimes: ['30m', '45m', '1h', '1h 30m'],
-      incomePerHour: [300, 600, 900, 1200, 1500]
-    },
-    "Livestock": {
-      buildCost: 6000,
-      buildTime: '1h 15m',
-      upgradeCosts: [2500, 3500, 4500, 5500],
-      upgradeTimes: ['40m', '55m', '1h 10m', '1h 25m'],
-      incomePerHour: [350, 700, 1050, 1400, 1750]
-    },
-    "Mining": {
-      buildCost: 10000,
-      buildTime: '2h',
-      upgradeCosts: [4000, 6000, 8000, 10000],
-      upgradeTimes: ['1h', '1h 30m', '2h', '2h 30m'],
-      incomePerHour: [500, 1000, 1500, 2000, 2500]
-    },
-    "Hotels": {
-      buildCost: 15000,
-      buildTime: '3h',
-      upgradeCosts: [6000, 9000, 12000, 15000],
-      upgradeTimes: ['1h 30m', '2h 15m', '3h', '3h 45m'],
-      incomePerHour: [750, 1500, 2250, 3000, 3750]
-    },
-    "Restaurants": {
-      buildCost: 8000,
-      buildTime: '1h 45m',
-      upgradeCosts: [3200, 4800, 6400, 8000],
-      upgradeTimes: ['50m', '1h 15m', '1h 40m', '2h 5m'],
-      incomePerHour: [400, 800, 1200, 1600, 2000]
-    },
-    "Bars": {
-      buildCost: 7000,
-      buildTime: '1h 30m',
-      upgradeCosts: [2800, 4200, 5600, 7000],
-      upgradeTimes: ['45m', '1h 7m', '1h 30m', '1h 52m'],
-      incomePerHour: [350, 700, 1050, 1400, 1750]
-    },
-    "Nightclubs": {
-      buildCost: 20000,
-      buildTime: '4h',
-      upgradeCosts: [8000, 12000, 16000, 20000],
-      upgradeTimes: ['2h', '3h', '4h', '5h'],
-      incomePerHour: [1000, 2000, 3000, 4000, 5000]
-    },
-    "ClothingBrands": {
-      buildCost: 12000,
-      buildTime: '2h 30m',
-      upgradeCosts: [4800, 7200, 9600, 12000],
-      upgradeTimes: ['1h 15m', '1h 52m', '2h 30m', '3h 7m'],
-      incomePerHour: [600, 1200, 1800, 2400, 3000]
-    },
-    "Automotive": {
-      buildCost: 25000,
-      buildTime: '5h',
-      upgradeCosts: [10000, 15000, 20000, 25000],
-      upgradeTimes: ['2h 30m', '3h 45m', '5h', '6h 15m'],
-      incomePerHour: [1250, 2500, 3750, 5000, 6250]
-    },
-    "Tech": {
-      buildCost: 30000,
-      buildTime: '6h',
-      upgradeCosts: [12000, 18000, 24000, 30000],
-      upgradeTimes: ['3h', '4h 30m', '6h', '7h 30m'],
-      incomePerHour: [1500, 3000, 4500, 6000, 7500]
-    },
-    "Finance": {
-      buildCost: 40000,
-      buildTime: '8h',
-      upgradeCosts: [16000, 24000, 32000, 40000],
-      upgradeTimes: ['4h', '6h', '8h', '10h'],
-      incomePerHour: [2000, 4000, 6000, 8000],
-}
-}  
+  "Agriculture": {
+    buildCost: 2000,
+    buildTime: '30m',
+    upgradeCosts: [4000, 6000, 10000, 15000],
+    upgradeTimes: ['30m', '1h', '2h', '3h'],
+    incomePerHour: [100, 300, 500, 700, 900]
+  },
+  "Livestock": {
+    buildCost: 2500,
+    buildTime: '37m 30s',
+    upgradeCosts: [4500, 7000, 11000, 16000],
+    upgradeTimes: ['37m 30s', '1h 15m', '2h 30m', '3h 45m'],
+    incomePerHour: [120, 360, 600, 840, 1080]
+  },
+  "Mining": {
+    buildCost: 5000,
+    buildTime: '1h 15m',
+    upgradeCosts: [9000, 14000, 22000, 32000],
+    upgradeTimes: ['1h 15m', '2h 30m', '5h', '7h 30m'],
+    incomePerHour: [150, 450, 750, 1050, 1350]
+  },
+  "Hotels": {
+    buildCost: 8000,
+    buildTime: '2h',
+    upgradeCosts: [15000, 23000, 36000, 52000],
+    upgradeTimes: ['2h', '4h', '8h', '12h'],
+    incomePerHour: [200, 600, 1000, 1400, 1800]
+  },
+  "Restaurants": {
+    buildCost: 3000,
+    buildTime: '45m',
+    upgradeCosts: [5500, 8500, 13000, 19000],
+    upgradeTimes: ['45m', '1h 30m', '3h', '4h 30m'],
+    incomePerHour: [130, 390, 650, 910, 1170]
+  },
+  "Bars": {
+    buildCost: 3500,
+    buildTime: '1h',
+    upgradeCosts: [6500, 10000, 15500, 23000],
+    upgradeTimes: ['1h', '2h', '4h', '6h'],
+    incomePerHour: [140, 420, 700, 980, 1260]
+  },
+  "Nightclubs": {
+    buildCost: 10000,
+    buildTime: '2h 30m',
+    upgradeCosts: [19000, 29000, 44000, 65000],
+    upgradeTimes: ['2h 30m', '5h', '10h', '15h'],
+    incomePerHour: [250, 750, 1250, 1750, 2250]
+  },
+  "ClothingBrands": {
+    buildCost: 6000,
+    buildTime: '1h 30m',
+    upgradeCosts: [11000, 17000, 26000, 38000],
+    upgradeTimes: ['1h 30m', '3h', '6h', '9h'],
+    incomePerHour: [180, 540, 900, 1260, 1620]
+  },
+  "Automotive": {
+    buildCost: 12000,
+    buildTime: '3h',
+    upgradeCosts: [22000, 34000, 52000, 76000],
+    upgradeTimes: ['3h', '6h', '12h', '18h'],
+    incomePerHour: [300, 900, 1500, 2100, 2700]
+  },
+  "Tech": {
+    buildCost: 15000,
+    buildTime: '3h 45m',
+    upgradeCosts: [28000, 43000, 65000, 95000],
+    upgradeTimes: ['3h 45m', '7h 30m', '15h', '22h 30m'],
+    incomePerHour: [350, 1050, 1750, 2450, 3150]
+  },
+  "Finance": {
+    buildCost: 18000,
+    buildTime: '4h 30m',
+    upgradeCosts: [33000, 51000, 78000, 115000],
+    upgradeTimes: ['4h 30m', '9h', '18h', '27h'],
+    incomePerHour: [400, 1200, 2000, 2800, 3600]
+  }
+};

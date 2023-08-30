@@ -6,6 +6,9 @@ import compression from 'compression';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 
+import './src/scripts/updateTokens.js'
+console.log("Script de updateTokens importado");
+
 import playerRoutes from './src/routes/player.routes.js'
 import stateRoutes from './src/routes/state.routes.js'
 import economicRouter from './src/routes/economicAct.routes.js'
@@ -47,15 +50,16 @@ app.use((req, res, next) => {
 const connection = async () => {
     try {
         await mongoose.connect(CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-        console.log('Connected to MongoDB');
+        console.log('Conectado a MongoDB');
     } catch (error) {
-        console.log('Failed to connect to MongoDB:', error.message);
+        console.log('Falló la conexión a MongoDB:', error.message);
         throw error;
     }
 };
 
 const startServer = async () => {
     try {
+        console.log("Intentando conectar a MongoDB y arrancar el servidor...");
         await connection();
         app.listen(port, () => {
             console.log(`Servidor de Blockchain Baron corriendo en http://localhost:${port} 🔥🎮`);
