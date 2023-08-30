@@ -52,6 +52,9 @@ export const buildCompany = async (req, res) => {
       });
     
       await newEconomicAct.save();
+
+      state.companies.push(newCompany._id);
+      await state.save();
   
       // Incrementar el ingreso del jugador
       player.income += newCompany.incomePerHour; // <--- Aquí está el cambio

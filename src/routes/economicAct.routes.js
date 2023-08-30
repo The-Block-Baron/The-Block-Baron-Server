@@ -13,10 +13,6 @@ router.post('/players/:id/economicActivity/build', buildCompany);
 export default router;
 
 
-// Ruta: POST /players/:id/economicActivity/build
-// Controlador: buildCompany
-// Parámetros: playerId, companyName, stateId
-// Mejorar una Compañía Existente
 
 // Ruta: PUT /players/:id/economicActivity/improve/:companyId
 // Controlador: improveCompany

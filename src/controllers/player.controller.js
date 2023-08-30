@@ -1,6 +1,7 @@
 import Player from '../models/player.model.js';
 import EconomicAct from '../models/economicAct.model.js';
 import Company from '../models/company.model.js';
+import State from '../models/state.model.js';
 
 
 export const createPlayer = async (req, res) => {
@@ -73,28 +74,38 @@ export const updatePlayer = async (req, res) => {
 
 export const deletePlayer = async (req, res) => {
   try {
-      const playerId = req.params.id;
+    const playerId = req.params.id;
+    const player = await Player.findById(playerId);
+    if (!player) {
+      return res.status(404).json({ error: 'Jugador no encontrado' });
+    }
 
-      // Encuentra el jugador por su ID
-      const player = await Player.findById(playerId);
+    // Encuentra y elimina todas las actividades económicas asociadas con el jugador
+    await EconomicAct.deleteMany({ player: playerId });
 
-      if (!player) {
-          return res.status(404).json({ error: 'Jugador no encontrado' });
-      }
+    // Encuentra todas las compañías asociadas con el jugador
+    const companiesToDelete = await Company.find({ ownerId: playerId });
 
-      // Elimina todas las actividades económicas asociadas con el jugador
-      await EconomicAct.deleteMany({ player: playerId });
+    // Borrar las entradas de las compañías en los estados relacionados
+    for (const company of companiesToDelete) {
+      const stateId = company.state;
+      const state = await State.findById(stateId);
+      
+      // Aquí eliminamos la referencia a la compañía en el array `companies` del estado
+      state.companies.pull(company._id);
+      await state.save();
+    }
 
-      // Elimina todas las compañías asociadas con el jugador
-      await Company.deleteMany({ ownerId: playerId });
+    // Elimina todas las compañías asociadas con el jugador
+    await Company.deleteMany({ ownerId: playerId });
 
-      // Finalmente, elimina al jugador
-      await Player.deleteOne({ _id: playerId });
+    // Finalmente, elimina al jugador
+    await Player.deleteOne({ _id: playerId });
 
-      res.status(200).json({ message: 'Jugador y todas las entidades asociadas eliminadas exitosamente' });
+    res.status(200).json({ message: 'Jugador y todas las entidades asociadas eliminadas exitosamente' });
   } catch (error) {
-      console.error(error); // Para depuración
-      res.status(500).json({ error: 'Error del servidor al eliminar el jugador y entidades asociadas' });
+    console.error(error); // Para depuración
+    res.status(500).json({ error: 'Error del servidor al eliminar el jugador y entidades asociadas' });
   }
 };
 
