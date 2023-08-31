@@ -1,11 +1,13 @@
 import express from 'express';
-import { getEconomicActivitiesTypes, buildCompany } from '../controllers/economicAct.controller.js';
+import { getEconomicActivitiesTypes, buildCompany, improveCompany, closeCompany } from '../controllers/economicAct.controller.js';
 
 const router = express.Router();
 
 // Ruta para obtener los tipos de actividades económicas y tipos de mejoras
 router.get('/economicActivities', getEconomicActivitiesTypes);
 router.post('/players/:id/economicActivity/build', buildCompany);
+router.put('/players/:id/economicActivity/improve/:companyId', improveCompany);
+router.delete('/players/:id/economicActivity/delete/:companyId', closeCompany);
 
 
 // ... tus otras rutas
@@ -14,10 +16,7 @@ export default router;
 
 
 
-// Ruta: PUT /players/:id/economicActivity/improve/:companyId
-// Controlador: improveCompany
-// Parámetros: playerId, companyId
-// Ver Todas las Compañías de un Jugador
+
 
 // Ruta: GET /players/:id/economicActivity/companies
 // Controlador: getAllCompanies

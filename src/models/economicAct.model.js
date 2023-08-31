@@ -20,10 +20,6 @@ const economicActSchema = new Schema({
     ref: 'Company', // Referencia al nuevo modelo Company
     required: true
   },
-  improvementType: {
-    type: String,
-    enum: ['Type1', 'Type2', 'Type3', 'Type4'],
-  },
   state: {  
     type: Schema.Types.ObjectId,
     ref: 'State',
