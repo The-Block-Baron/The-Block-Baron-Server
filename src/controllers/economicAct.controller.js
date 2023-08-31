@@ -91,42 +91,83 @@ export const buildCompany = async (req, res) => {
 };
 
 
-  export const improveCompany = async (req, res) => {
-    try {
-      const { id: playerId, companyId } = req.params;
-  
-      const player = await Player.findById(playerId);
-      const company = await Company.findById(companyId);
-  
-      if (!player) {
-        return res.status(404).json({ error: 'Jugador no encontrado' });
-      }
-  
-      if (!company) {
-        return res.status(404).json({ error: 'Empresa no encontrada' });
-      }
-  
-      // Comprobar si la mejora es válida
-      if (company.level >= 5) {
-        return res.status(400).json({ error: 'La empresa ya ha alcanzado el nivel máximo' });
-      }
-  
-      // Guardar el ingreso anterior de la empresa para calcular correctamente
-      const oldIncomePerHour = company.incomePerHour;
-  
-      // Lógica para mejorar la empresa
-      company.level += 1;
-      company.incomePerHour *= 1.2;  // Incremento del 20%
-      await company.save();
-  
-      // Lógica para actualizar el ingreso del jugador
-      player.income = player.income - oldIncomePerHour + company.incomePerHour;
-      await player.save();
-  
-      res.status(200).json({ message: 'Empresa mejorada exitosamente', company });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error del servidor al mejorar la empresa' });
+
+export const improveCompany = async (req, res) => {
+  try {
+    const { companyId, id: playerId } = req.params;
+    
+    const company = await Company.findById(companyId);
+    if (!company) {
+      return res.status(404).json({ error: 'Company not found' });
     }
-  };
-  
+    
+    const player = await Player.findById(playerId);
+    console.log(playerId)
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+
+
+    if (company.level >= 5) {
+      return res.status(400).json({ error: 'La empresa ya ha alcanzado el nivel máximo' });
+    }
+
+    const typeDetails = companyDetailsByType[company.type];
+    const upgradeCost = typeDetails.upgradeCost[company.level - 1]; // assuming level starts at 1
+    
+    if (player.inGameTokens < upgradeCost) {
+      return res.status(400).json({ error: 'Not enough tokens' });
+    }
+    
+    player.inGameTokens -= upgradeCost;
+    player.income += (typeDetails.incomePerHour[company.level] - typeDetails.incomePerHour[company.level - 1]);
+    
+    company.level += 1;
+    company.incomePerHour = typeDetails.incomePerHour[company.level - 1];
+    
+    await company.save();
+    await player.save();
+    
+    res.status(200).json({ company, player });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+
+export const closeCompany = async (req, res) => {
+  try {
+    const { companyId, id: playerId } = req.params;
+    
+    const company = await Company.findById(companyId);
+    const player = await Player.findById(playerId);
+    
+    if (!company || !player) {
+      return res.status(404).json({ error: 'Company or Player not found' });
+    }
+
+    const typeDetails = companyDetailsByType[company.type];
+    
+    if (!typeDetails) {
+      return res.status(400).json({ error: 'Invalid company type' });
+    }
+
+    const deleteCost = typeDetails.closeCost;  // Usamos el costo específico para el tipo de empresa
+    
+    if (player.inGameTokens < deleteCost) {
+      return res.status(400).json({ error: 'Not enough tokens to delete' });
+    }
+    
+    player.inGameTokens -= deleteCost;
+    player.income -= company.incomePerHour;
+    player.Companies = player.Companies.filter(id => !id.equals(company._id));
+    
+    await Company.deleteOne({ _id: company._id });
+    await player.save();
+    
+    res.status(200).json({ message: 'Company deleted', player });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};

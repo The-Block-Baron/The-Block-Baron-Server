@@ -47,6 +47,14 @@ app.use((req, res, next) => {
     res.status(404).send('Página no encontrada.');
 });
 
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+      return res.status(400).send({ error: 'Invalid JSON' }); 
+    }
+    next();
+  });
+  
+
 const connection = async () => {
     try {
         await mongoose.connect(CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
