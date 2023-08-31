@@ -21,6 +21,22 @@ const companySchema = new Schema({
     type: Number,
     required: true
   },
+  buildCost: {
+    type: Number,
+    required: true
+  },
+  upgradeCost: {
+    type: Number,
+    required: true
+  },
+  buildTime: {
+    type: Number, // Tiempo en minutos
+    required: true
+  },
+  upgradeTime: {
+    type: Number, // Tiempo en minutos
+    required: true
+  },
   isActive: {
     type: Boolean,
     default: true
