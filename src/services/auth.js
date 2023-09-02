@@ -1,4 +1,5 @@
-import Player from '../models/player.model';
+import Player from '../models/player.model.js';
+import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { body, validationResult } from 'express-validator';

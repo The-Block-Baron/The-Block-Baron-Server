@@ -1,16 +1,17 @@
 import express from 'express';
 import { getEconomicActivitiesTypes, buildCompany, improveCompany, closeCompany } from '../controllers/economicAct.controller.js';
+import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
 // Ruta para obtener los tipos de actividades económicas y tipos de mejoras
 router.get('/economicActivities', getEconomicActivitiesTypes);
-router.post('/players/:id/economicActivity/build', buildCompany);
-router.put('/players/:id/economicActivity/improve/:companyId', improveCompany);
-router.delete('/players/:id/economicActivity/delete/:companyId', closeCompany);
+router.post('/players/:id/economicActivity/build', authMiddleware, buildCompany);
+router.put('/players/:id/economicActivity/improve/:companyId', authMiddleware, improveCompany);
+router.delete('/players/:id/economicActivity/delete/:companyId', authMiddleware, closeCompany);
 
 
-// ... tus otras rutas
+
 
 export default router;
 
