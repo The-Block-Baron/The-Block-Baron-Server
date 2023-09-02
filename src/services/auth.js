@@ -55,32 +55,31 @@ export const register = async (req, res) => {
 
 
 
-// export const login = async (req, res) => {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//         return res.status(400).json({ errors: errors.array() });
-//     }
+export const login = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
-//     const { email, password } = req.body
+    const { email, password } = req.body;
 
-//     const user = await User.findOne({email})
-//     if(!user) {
-//         return res.status(400).json({message: 'User not found'})
-//     }
+    const player = await Player.findOne({ email });
+    if (!player) {
+        return res.status(400).json({ message: 'Player not found' });
+    }
 
-//     const isPasswordCorrect = await bcrypt.compare(password, user.password)
-//     if(!isPasswordCorrect) {
-//         return res.status(400).json({message: 'Invalid Password'})
-//     }
+    const isPasswordCorrect = await bcrypt.compare(password, player.password);
+    if (!isPasswordCorrect) {
+        return res.status(400).json({ message: 'Invalid password' });
+    }
 
-//     const userForToken = {
-//         id: user._id,
-//         username: user.username
-//     }
+    const playerForToken = {
+        id: player._id,
+        username: player.username
+    };
 
-//     const token = jwt.sign(userForToken, process.env.JWT_SECRET, {expiresIn:'1h'})
+    const token = jwt.sign(playerForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-//     res.status(200).json({user, token})
-//     console.log('Login successful')
-
-// }
+    res.status(200).json({ player, token });
+    console.log('Login successful');
+};
