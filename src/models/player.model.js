@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-
-import Company from './company.model.js';
+import bcrypt from 'bcrypt';
 
 const Schema = mongoose.Schema;
 
@@ -11,6 +10,15 @@ const playerSchema = new Schema({
         unique: true,
         trim: true,
         minlength: 3
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
     },
     income: {
         type: Number,
@@ -31,7 +39,16 @@ const playerSchema = new Schema({
     }],
 });
 
-playerSchema.index({ username: 1 });
+playerSchema.pre('save', async function(next) {
+    if (this.isModified('password') || this.isNew) {
+        const saltRounds = 10;
+        this.password = await bcrypt.hash(this.password, saltRounds);
+    }
+    next();
+});
+
+playerSchema.index({ username: 1, email: 1 });
 
 const Player = mongoose.model('Player', playerSchema);
+
 export default Player;
