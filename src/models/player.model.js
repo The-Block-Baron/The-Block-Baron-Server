@@ -39,7 +39,6 @@ const playerSchema = new Schema({
     }],
 });
 
-// Hash the password before saving it to the database
 playerSchema.pre('save', async function(next) {
     if (this.isModified('password') || this.isNew) {
         const saltRounds = 10;
