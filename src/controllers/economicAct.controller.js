@@ -22,6 +22,11 @@ export const buildCompany = async (req, res) => {
     const { id: playerId } = req.params;
     const { companyName, stateId } = req.body;
 
+    if (req.player.id !== playerId) {
+      return res.status(403).json({ error: 'Unauthorized to build a company for this player' });
+  }
+
+
     if (!companyDetailsByType.hasOwnProperty(companyName)) {
       return res.status(400).json({ error: 'Tipo de empresa no válido' });
     }
@@ -100,6 +105,14 @@ export const improveCompany = async (req, res) => {
     if (!company) {
       return res.status(404).json({ error: 'Company not found' });
     }
+
+    if (String(company.ownerId) !== String(playerId)) {
+      return res.status(403).json({ error: 'Unauthorized to improve this company' });
+    }
+
+    if (req.player.id !== playerId) {
+      return res.status(403).json({ error: 'Unauthorized to improve a company for this player' });
+    }
     
     const player = await Player.findById(playerId);
     console.log(playerId)
@@ -143,8 +156,22 @@ export const closeCompany = async (req, res) => {
     const company = await Company.findById(companyId);
     const player = await Player.findById(playerId);
     
-    if (!company || !player) {
-      return res.status(404).json({ error: 'Company or Player not found' });
+    if (!company) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    // Check if the player exists
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+
+    if (String(company.ownerId) !== String(playerId)) {
+      return res.status(403).json({ error: 'Unauthorized to close this company' });
+    }
+
+    // Check if the player making the request is the same as the player in the URL
+    if (req.player.id !== playerId) {
+      return res.status(403).json({ error: 'Unauthorized to close a company for this player' });
     }
 
     const typeDetails = companyDetailsByType[company.type];

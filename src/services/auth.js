@@ -28,8 +28,8 @@ export const register = async (req, res) => {
 
     const { username, email, password } = req.body;
 
-    const existingUser = await Player.findOne({ email });
-    if (existingUser) {
+    const existingPlayer = await Player.findOne({ email });
+    if (existingPlayer) {
         return res.status(400).json({ message: 'Email already in use' });
     }
 
@@ -47,12 +47,13 @@ export const register = async (req, res) => {
         };
         
         const token = jwt.sign(playerForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(201).json({ user: savedPlayer, token });
+        res.status(201).json({ player: savedPlayer, token });
     } catch (error) {
         console.error(error);
         res.status(400).json({ message: error.message });
     }
 };
+
 
 
 
