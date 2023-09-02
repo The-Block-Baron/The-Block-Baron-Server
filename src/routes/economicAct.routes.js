@@ -5,7 +5,7 @@ import authMiddleware from '../middlewares/authMiddleware.js';
 const router = express.Router();
 
 // Ruta para obtener los tipos de actividades económicas y tipos de mejoras
-router.get('/economicActivities', getEconomicActivitiesTypes);
+router.get('/economicActivities',authMiddleware, getEconomicActivitiesTypes);
 router.post('/players/:id/economicActivity/build', authMiddleware, buildCompany);
 router.put('/players/:id/economicActivity/improve/:companyId', authMiddleware, improveCompany);
 router.delete('/players/:id/economicActivity/delete/:companyId', authMiddleware, closeCompany);

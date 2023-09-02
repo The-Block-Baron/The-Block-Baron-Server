@@ -4,40 +4,7 @@ import Company from '../models/company.model.js';
 import State from '../models/state.model.js';
 
 
-export const createPlayer = async (req, res) => {
 
-    const { username, income, inGameTokens, isActive } = req.body;
-  
-    if (!username || username.length < 3) {
-      return res.status(400).json({ error: 'El nombre de usuario es requerido y debe tener al menos 3 caracteres.' });
-    }
-
-  
-    try {
-      const existingPlayer = await Player.findOne({ username });
-      if (existingPlayer) {
-        return res.status(400).json({ error: 'El nombre de usuario ya existe.' });
-      }
-  
-      const newPlayer = new Player({
-        username,
-        income: income || 200,
-        inGameTokens: inGameTokens || 0,
-        isActive: isActive !== undefined ? isActive : true
-      });
-  
-      await newPlayer.save();
-      res.status(201).json(newPlayer);
-      
-    } catch (error) {
-      if (error.name === 'ValidationError') {
-        res.status(400).json({ error: error.message });
-      } else {
-        res.status(500).json({ error: 'Error del servidor al crear el jugador.' });
-      }
-    }
-  };
-  
 
 export const updatePlayer = async (req, res) => {
   const { username, income, inGameTokens, isActive } = req.body;
