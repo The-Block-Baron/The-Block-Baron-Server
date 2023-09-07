@@ -7,23 +7,37 @@ import State from '../models/state.model.js';
 
 
 export const updatePlayer = async (req, res) => {
-  const { username, income, inGameTokens, isActive } = req.body;
+  const { username, email, password, income, inGameTokens, isActive } = req.body;
+  const { role, id: userId } = req.user; // Extract role and id from req.user
+  const playerId = req.params.id;
+
+  // Check if the user is authorized to update this player
+  if (role === 'player' && String(userId) !== String(playerId)) {
+    return res.status(403).json({ error: 'Unauthorized to update this player' });
+  }
 
   if (username && username.length < 3) {
     return res.status(400).json({ error: 'El nombre de usuario debe tener al menos 3 caracteres.' });
   }
 
-
   try {
-    const existingPlayer = await Player.findById(req.params.id);
+    const existingPlayer = await Player.findById(playerId);
     if (!existingPlayer) {
       return res.status(404).json({ error: 'Jugador no encontrado' });
     }
 
+    // Fields that can be updated by both roles
     if (username) existingPlayer.username = username;
-    if (income) existingPlayer.income = income;
-    if (inGameTokens !== undefined) existingPlayer.inGameTokens = inGameTokens;
-    if (isActive !== undefined) existingPlayer.isActive = isActive;
+    if (email) existingPlayer.email = email;
+    if (password) existingPlayer.password = password;
+    if (isActive !== undefined && role === 'admin') existingPlayer.isActive = isActive; // isActive can only be changed by admin
+    
+    // Fields that can be updated only by admin
+    if (role === 'admin') {
+      if (income) existingPlayer.income = income;
+      if (inGameTokens !== undefined) existingPlayer.inGameTokens = inGameTokens;
+      if (Array.isArray(req.body.Companies)) existingPlayer.Companies = req.body.Companies;
+    }
 
     await existingPlayer.save();
 
@@ -37,6 +51,7 @@ export const updatePlayer = async (req, res) => {
     }
   }
 };
+
 
 
 export const deletePlayer = async (req, res) => {

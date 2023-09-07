@@ -42,12 +42,14 @@ export const buildCompany = async (req, res) => {
     }
     // Verificar si el jugador puede pagar la empresa
     const companyDetails = companyDetailsByType[companyName];
-    if (player.inGameTokens < companyDetails.buildCost) {
+    if (role === 'player' && player.inGameTokens < companyDetails.buildCost) {
       return res.status(400).json({ error: 'Tokens insuficientes para construir esta empresa' });
     }
 
     // Restar el costo de construcción del saldo del jugador
-    player.inGameTokens -= companyDetails.buildCost;
+    if (role === 'player') {
+      player.inGameTokens -= companyDetails.buildCost;
+    }
 
     const newCompany = new Company({
       name: companyName,
@@ -126,7 +128,10 @@ export const improveCompany = async (req, res) => {
       return res.status(400).json({ error: 'Not enough tokens' });
     }
 
-    player.inGameTokens -= upgradeCost;
+    if (role === 'player') {
+      player.inGameTokens -= upgradeCost;
+    }
+
     player.income += (typeDetails.incomePerHour[company.level] - typeDetails.incomePerHour[company.level - 1]);
     
     company.level += 1;
@@ -178,7 +183,10 @@ export const closeCompany = async (req, res) => {
       return res.status(400).json({ error: 'Not enough tokens to delete' });
     }
     
-    player.inGameTokens -= deleteCost;
+    if (role === 'player') {
+      player.inGameTokens -= upgradeCost;
+    }
+    
     player.income -= company.incomePerHour;
     player.Companies = player.Companies.filter(id => !id.equals(company._id));
     

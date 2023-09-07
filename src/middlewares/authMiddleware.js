@@ -18,28 +18,25 @@ const authMiddleware = async (req, res, next) => {
     try {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         
-        // Search in Players
         const player = await Player.findById(decodedToken.id);
-        
-        // Search in Admins
         const admin = await Admin.findById(decodedToken.id);
-
+      
         if (!player && !admin) {
-            return res.status(401).json({ message: 'User not found' });
+          return res.status(401).json({ message: 'User not found' });
         }
-
+      
         if (player) {
-            req.user = {
-                role: 'player',
-                id: player._id,
-            };
+          req.user = {
+            role: 'player',
+            id: player._id,
+          };
         } else if (admin) {
-            req.user = {
-                role: 'admin',
-                id: admin._id,
-            };
+          req.user = {
+            role: 'admin',
+            id: admin._id,
+          };
         }
-
+      
         next();
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError) {
