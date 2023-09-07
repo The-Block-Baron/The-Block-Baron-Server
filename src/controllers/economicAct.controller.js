@@ -21,11 +21,11 @@ export const buildCompany = async (req, res) => {
   try {
     const { id: playerId } = req.params;
     const { companyName, stateId } = req.body;
+    const { role, id: userId } = req.user;
 
-    if (req.player.id !== playerId) {
+    if (role === 'player' && String(userId) !== String(playerId)) {
       return res.status(403).json({ error: 'Unauthorized to build a company for this player' });
-  }
-
+    }
 
     if (!companyDetailsByType.hasOwnProperty(companyName)) {
       return res.status(400).json({ error: 'Tipo de empresa no válido' });
@@ -40,7 +40,6 @@ export const buildCompany = async (req, res) => {
     if (!state) {
       return res.status(404).json({ error: 'Estado no encontrado' });
     }
-
     // Verificar si el jugador puede pagar la empresa
     const companyDetails = companyDetailsByType[companyName];
     if (player.inGameTokens < companyDetails.buildCost) {
@@ -100,38 +99,33 @@ export const buildCompany = async (req, res) => {
 export const improveCompany = async (req, res) => {
   try {
     const { companyId, id: playerId } = req.params;
-    
+    const { role, id: userId } = req.user;  
+
     const company = await Company.findById(companyId);
     if (!company) {
       return res.status(404).json({ error: 'Company not found' });
     }
 
-    if (String(company.ownerId) !== String(playerId)) {
+    if (role === 'player' && (String(company.ownerId) !== String(playerId) || String(userId) !== String(playerId))) {
       return res.status(403).json({ error: 'Unauthorized to improve this company' });
     }
 
-    if (req.player.id !== playerId) {
-      return res.status(403).json({ error: 'Unauthorized to improve a company for this player' });
-    }
-    
     const player = await Player.findById(playerId);
-    console.log(playerId)
     if (!player) {
       return res.status(404).json({ error: 'Player not found' });
     }
-
 
     if (company.level >= 5) {
       return res.status(400).json({ error: 'La empresa ya ha alcanzado el nivel máximo' });
     }
 
     const typeDetails = companyDetailsByType[company.type];
-    const upgradeCost = typeDetails.upgradeCost[company.level - 1]; // assuming level starts at 1
+    const upgradeCost = typeDetails.upgradeCost[company.level - 1];  // assuming level starts at 1
     
     if (player.inGameTokens < upgradeCost) {
       return res.status(400).json({ error: 'Not enough tokens' });
     }
-    
+
     player.inGameTokens -= upgradeCost;
     player.income += (typeDetails.incomePerHour[company.level] - typeDetails.incomePerHour[company.level - 1]);
     
@@ -149,9 +143,11 @@ export const improveCompany = async (req, res) => {
 
 
 
+
 export const closeCompany = async (req, res) => {
   try {
     const { companyId, id: playerId } = req.params;
+    const { role, id: userId } = req.user;  // Extract role and id from req.user
     
     const company = await Company.findById(companyId);
     const player = await Player.findById(playerId);
@@ -165,13 +161,9 @@ export const closeCompany = async (req, res) => {
       return res.status(404).json({ error: 'Player not found' });
     }
 
-    if (String(company.ownerId) !== String(playerId)) {
+    // Check for ownership and role-based access
+    if (role === 'player' && (String(company.ownerId) !== String(playerId) || String(userId) !== String(playerId))) {
       return res.status(403).json({ error: 'Unauthorized to close this company' });
-    }
-
-    // Check if the player making the request is the same as the player in the URL
-    if (req.player.id !== playerId) {
-      return res.status(403).json({ error: 'Unauthorized to close a company for this player' });
     }
 
     const typeDetails = companyDetailsByType[company.type];
@@ -180,7 +172,7 @@ export const closeCompany = async (req, res) => {
       return res.status(400).json({ error: 'Invalid company type' });
     }
 
-    const deleteCost = typeDetails.closeCost;  // Usamos el costo específico para el tipo de empresa
+    const deleteCost = typeDetails.closeCost;  // Assuming specific cost for closing the type of company
     
     if (player.inGameTokens < deleteCost) {
       return res.status(400).json({ error: 'Not enough tokens to delete' });
