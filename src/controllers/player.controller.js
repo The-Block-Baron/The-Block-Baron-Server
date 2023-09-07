@@ -41,7 +41,14 @@ export const updatePlayer = async (req, res) => {
 
 export const deletePlayer = async (req, res) => {
   try {
+    const { role, id: userId } = req.user; // Extract role and id from req.user
     const playerId = req.params.id;
+
+    // Check if the user is authorized to delete this player
+    if (role === 'player' && String(userId) !== String(playerId)) {
+      return res.status(403).json({ error: 'Unauthorized to delete this player' });
+    }
+
     const player = await Player.findById(playerId);
     if (!player) {
       return res.status(404).json({ error: 'Jugador no encontrado' });
