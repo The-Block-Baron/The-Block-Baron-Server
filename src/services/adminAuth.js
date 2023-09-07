@@ -1,3 +1,4 @@
+import Admin from '../models/admin.model.js';
 import Player from '../models/player.model.js';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
@@ -5,13 +6,13 @@ import dotenv from 'dotenv';
 import { body, validationResult } from 'express-validator';
 
 // Validation middleware
-export const validateRegistration = [
+export const validateAdminRegistration = [
     body('username').isString().withMessage('Username must be a string').isLength({ min: 4 }).withMessage('Username must be at least 4 characters long'),
     body('email').isEmail().withMessage('Email must be valid'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
 ];
 
-export const validateLogin = [
+export const validateAdminLogin = [
     body('email').isEmail().withMessage('Email must be valid'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
 ];
@@ -19,8 +20,8 @@ export const validateLogin = [
 // Initialize dotenv
 dotenv.config();
 
-// Player Registration logic
-export const register = async (req, res) => {
+// Admin Registration logic
+export const adminRegister = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -28,33 +29,33 @@ export const register = async (req, res) => {
 
     const { username, email, password } = req.body;
 
-    // Verificar si el email ya existe en los registros de Player
-    const existingPlayer = await Player.findOne({ email });
-    if (existingPlayer) {
-        return res.status(400).json({ message: 'Email already in use by another player' });
-    }
-
     // Verificar si el email ya existe en los registros de Admin
     const existingAdmin = await Admin.findOne({ email });
     if (existingAdmin) {
-        return res.status(400).json({ message: 'Email already in use by an admin' });
+        return res.status(400).json({ message: 'Email already in use by another admin' });
     }
 
-    const player = new Player({
+    // Verificar si el email ya existe en los registros de Player
+    const existingPlayer = await Player.findOne({ email });
+    if (existingPlayer) {
+        return res.status(400).json({ message: 'Email already in use by a player' });
+    }
+
+    const admin = new Admin({
         username,
         email,
         password,
     });
 
     try {
-        const savedPlayer = await player.save();
-        const playerForToken = {
-            id: savedPlayer._id,
-            username: savedPlayer.username,
+        const savedAdmin = await admin.save();
+        const adminForToken = {
+            id: savedAdmin._id,
+            username: savedAdmin.username,
         };
         
-        const token = jwt.sign(playerForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(201).json({ player: savedPlayer, token });
+        const token = jwt.sign(adminForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.status(201).json({ admin: savedAdmin, token });
     } catch (error) {
         console.error(error);
         res.status(400).json({ message: error.message });
@@ -62,10 +63,8 @@ export const register = async (req, res) => {
 };
 
 
-
-
-
-export const login = async (req, res) => {
+// Admin Login logic
+export const adminLogin = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -73,23 +72,23 @@ export const login = async (req, res) => {
 
     const { email, password } = req.body;
 
-    const player = await Player.findOne({ email });
-    if (!player) {
-        return res.status(400).json({ message: 'Player not found' });
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+        return res.status(400).json({ message: 'Admin not found' });
     }
 
-    const isPasswordCorrect = await bcrypt.compare(password, player.password);
+    const isPasswordCorrect = await bcrypt.compare(password, admin.password);
     if (!isPasswordCorrect) {
         return res.status(400).json({ message: 'Invalid password' });
     }
 
-    const playerForToken = {
-        id: player._id,
-        username: player.username
+    const adminForToken = {
+        id: admin._id,
+        username: admin.username
     };
 
-    const token = jwt.sign(playerForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(adminForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    res.status(200).json({ player, token });
-    console.log('Login successful');
+    res.status(200).json({ admin, token });
+    console.log('Admin login successful');
 };
