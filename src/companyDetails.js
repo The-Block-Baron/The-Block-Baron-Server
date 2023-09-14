@@ -13,7 +13,7 @@ export const companyDetailsByType = {
     buildTime: 80,
     upgradeTime: [40, 80, 120, 160],
     incomePerHour: [20, 40, 60, 80, 100],
-    closeCost: 70  // Nuevo campo
+    closeCost: 70  
   },
   'Manufacturing': {
     buildCost: 150,

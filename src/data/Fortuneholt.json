@@ -1,0 +1,120 @@
+{
+    "name": "Fortuneholt",
+    "description": "The economic heart of Baronia, a hub for trading, alliances, and financial growth.",
+    "taxes": {
+      "incomeTax": 8
+    },
+    "availableCompanies": [
+      {
+        "type": "Finance",
+        "details": {
+          "buildCost": 350,
+          "upgradeCost": [175, 350, 525, 700],
+          "buildTime": 110,
+          "upgradeTime": [55, 110, 165, 220],
+          "incomePerHour": [35, 70, 105, 140, 175],
+          "closeCost": 90
+        }
+      },
+      {
+        "type": "Logistics",
+        "details": {
+          "buildCost": 400,
+          "upgradeCost": [200, 400, 600, 800],
+          "buildTime": 120,
+          "upgradeTime": [60, 120, 180, 240],
+          "incomePerHour": [40, 80, 120, 160, 200],
+          "closeCost": 100
+        }
+      },
+      {
+        "type": "Mining",
+        "details": {
+          "buildCost": 450,
+          "upgradeCost": [225, 450, 675, 900],
+          "buildTime": 130,
+          "upgradeTime": [65, 130, 195, 260],
+          "incomePerHour": [45, 90, 135, 180, 225],
+          "closeCost": 110
+        }
+      },
+      {
+        "type": "Real Estate",
+        "details": {
+          "buildCost": 500,
+          "upgradeCost": [250, 500, 750, 1000],
+          "buildTime": 140,
+          "upgradeTime": [70, 140, 210, 280],
+          "incomePerHour": [50, 100, 150, 200, 250],
+          "closeCost": 120
+        }
+      },
+      {
+        "type": "Retail",
+        "details": {
+          "buildCost": 300,
+          "upgradeCost": [150, 300, 450, 600],
+          "buildTime": 80,
+          "upgradeTime": [40, 80, 120, 160],
+          "incomePerHour": [30, 60, 90, 120, 150],
+          "closeCost": 75
+        }
+      },
+      {
+        "type": "Manufacturing",
+        "details": {
+          "buildCost": 400,
+          "upgradeCost": [200, 400, 600, 800],
+          "buildTime": 100,
+          "upgradeTime": [50, 100, 150, 200],
+          "incomePerHour": [40, 80, 120, 160, 200],
+          "closeCost": 90
+        }
+      },
+      {
+        "type": "Healthcare",
+        "details": {
+          "buildCost": 450,
+          "upgradeCost": [225, 450, 675, 900],
+          "buildTime": 110,
+          "upgradeTime": [55, 110, 165, 220],
+          "incomePerHour": [45, 90, 135, 180, 225],
+          "closeCost": 110
+        }
+      },
+      {
+        "type": "Education",
+        "details": {
+          "buildCost": 350,
+          "upgradeCost": [175, 350, 525, 700],
+          "buildTime": 90,
+          "upgradeTime": [45, 90, 135, 180],
+          "incomePerHour": [35, 70, 105, 140, 175],
+          "closeCost": 85
+        }
+      },
+      {
+        "type": "Energy",
+        "details": {
+          "buildCost": 600,
+          "upgradeCost": [300, 600, 900, 1200],
+          "buildTime": 150,
+          "upgradeTime": [75, 150, 225, 300],
+          "incomePerHour": [60, 120, 180, 240, 300],
+          "closeCost": 140
+        }
+      },
+      {
+        "type": "Agriculture",
+        "details": {
+          "buildCost": 200,
+          "upgradeCost": [100, 200, 300, 400],
+          "buildTime": 60,
+          "upgradeTime": [30, 60, 90, 120],
+          "incomePerHour": [20, 40, 60, 80, 100],
+          "closeCost": 50
+        }
+      }
+    ]
+  }
+  
