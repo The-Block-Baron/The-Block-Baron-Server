@@ -20,15 +20,11 @@ export const getEconomicActivitiesTypes = async (req, res) => {
 export const buildCompany = async (req, res) => {
   try {
     const { id: playerId } = req.params;
-    const { companyName, stateId } = req.body;
+    const { companyType, fictionalName, stateId } = req.body;
     const { role, id: userId } = req.user;
 
     if (role === 'player' && String(userId) !== String(playerId)) {
       return res.status(403).json({ error: 'Unauthorized to build a company for this player' });
-    }
-
-    if (!companyDetailsByType.hasOwnProperty(companyName)) {
-      return res.status(400).json({ error: 'Tipo de empresa no válido' });
     }
 
     const player = await Player.findById(playerId);
@@ -40,23 +36,27 @@ export const buildCompany = async (req, res) => {
     if (!state) {
       return res.status(404).json({ error: 'Estado no encontrado' });
     }
-    // Verificar si el jugador puede pagar la empresa
-    const companyDetails = companyDetailsByType[companyName];
+
+    const companyDetails = state.availableCompanies.find(company => company.type === companyType);
+    
+    if (!companyDetails) {
+      return res.status(400).json({ error: 'Tipo de empresa no válido' });
+    }
+
     if (role === 'player' && player.inGameTokens < companyDetails.buildCost) {
       return res.status(400).json({ error: 'Tokens insuficientes para construir esta empresa' });
     }
 
-    // Restar el costo de construcción del saldo del jugador
     if (role === 'player') {
       player.inGameTokens -= companyDetails.buildCost;
     }
 
     const newCompany = new Company({
-      name: companyName,
+      name: fictionalName,
       level: 1,
       state: stateId,
-      incomePerHour: companyDetails.incomePerHour[0], // Ingreso según el nivel 1
-      type: companyName,
+      incomePerHour: companyDetails.incomePerHour[0], 
+      type: companyType,
       ownerId: playerId,
       buildCost: companyDetails.buildCost,
       upgradeCost: companyDetails.upgradeCost,
@@ -75,15 +75,12 @@ export const buildCompany = async (req, res) => {
 
     await newEconomicAct.save();
 
-    state.companies.push(newCompany._id);
+    state.builtCompanies.push(newCompany._id);
     await state.save();
 
-    // Incrementar el ingreso del jugador
-    player.income += newCompany.incomePerHour; // <--- Aquí está el cambio
+    player.income += newCompany.incomePerHour; 
 
-    // Añadir la nueva compañía al jugador
     player.Companies.push(newCompany._id);
-
     await player.save();
 
     res.status(201).json({ 
@@ -95,6 +92,7 @@ export const buildCompany = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 
 
@@ -121,7 +119,16 @@ export const improveCompany = async (req, res) => {
       return res.status(400).json({ error: 'La empresa ya ha alcanzado el nivel máximo' });
     }
 
-    const typeDetails = companyDetailsByType[company.type];
+    const state = await State.findById(company.state);
+    if (!state) {
+      return res.status(404).json({ error: 'State not found' });
+    }
+
+    const typeDetails = state.availableCompanies.find(comp => comp.type === company.type);
+    if (!typeDetails) {
+      return res.status(400).json({ error: 'Company type not found in state' });
+    }
+
     const upgradeCost = typeDetails.upgradeCost[company.level - 1];  // assuming level starts at 1
     
     if (player.inGameTokens < upgradeCost) {
@@ -149,6 +156,7 @@ export const improveCompany = async (req, res) => {
 
 
 
+
 export const closeCompany = async (req, res) => {
   try {
     const { companyId, id: playerId } = req.params;
@@ -171,7 +179,12 @@ export const closeCompany = async (req, res) => {
       return res.status(403).json({ error: 'Unauthorized to close this company' });
     }
 
-    const typeDetails = companyDetailsByType[company.type];
+    const state = await State.findById(company.state);
+    if (!state) {
+      return res.status(404).json({ error: 'State not found' });
+    }
+
+    const typeDetails = state.availableCompanies.find(comp => comp.type === company.type);
     
     if (!typeDetails) {
       return res.status(400).json({ error: 'Invalid company type' });
@@ -184,14 +197,18 @@ export const closeCompany = async (req, res) => {
     }
     
     if (role === 'player') {
-      player.inGameTokens -= upgradeCost;
+      player.inGameTokens -= deleteCost;  // Corrected from upgradeCost to deleteCost
     }
     
     player.income -= company.incomePerHour;
     player.Companies = player.Companies.filter(id => !id.equals(company._id));
     
+    // Remove the company ID from the state's list of built companies
+    state.builtCompanies = state.builtCompanies.filter(id => !id.equals(company._id));
+    
     await Company.deleteOne({ _id: company._id });
     await player.save();
+    await state.save();
     
     res.status(200).json({ message: 'Company deleted', player });
   } catch (error) {

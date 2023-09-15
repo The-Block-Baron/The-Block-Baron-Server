@@ -36,12 +36,12 @@ const stateSchema = new Schema({
     }
   ],
   activeCrisis: {
-    type: String,
-    required: false,
+    type: Boolean,
+    default: false,
   },
   activeProsperity: {
-    type: String,
-    required: false,
+    type: Boolean,
+    default: false,
   },
   naturalDisasterOn: {
     type: Boolean,
