@@ -79,7 +79,7 @@ export const startServer = async () => {
     }
 };
 
-export function stopServer(callback) {
+export const stopServer = (callback) => {
     if (server) {
       server.close(() => {
         console.log("Server stopped");
