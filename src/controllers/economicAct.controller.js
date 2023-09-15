@@ -3,7 +3,6 @@ import Player from '../models/player.model.js';
 import State from '../models/state.model.js';
 import Company from '../models/company.model.js';
 
-import { companyDetailsByType } from '../companyDetails.js';
 
 
 // Controlador para obtener tipos de actividades económicas y tipos de mejoras
