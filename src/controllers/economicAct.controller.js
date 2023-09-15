@@ -36,6 +36,7 @@ export const buildCompany = async (req, res) => {
       return res.status(404).json({ error: 'Estado no encontrado' });
     }
 
+    
     const companyDetails = state.availableCompanies.find(company => company.type === companyType);
     
     if (!companyDetails) {
