@@ -67,7 +67,7 @@ const connection = async () => {
     }
 };
 
-const startServer = async () => {
+export const startServer = async () => {
     try {
         console.log("Intentando conectar a MongoDB y arrancar el servidor...");
         await connection();
@@ -79,6 +79,16 @@ const startServer = async () => {
     }
 };
 
+export const stopServer = (callback) => {
+    if (server) {
+      server.close(() => {
+        console.log("Server stopped");
+        callback();
+      });
+    } else {
+      callback();
+    }
+  }
 
 
 // Manejadores para cerrar la conexión correctamente
@@ -93,5 +103,7 @@ process.on('SIGINT', () => {
     console.log('Conexión a MongoDB cerrada.');
     process.exit(0);
 });
+
+export default app
 
 startServer();

@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 const economicActSchema = new Schema({
   type: {
     type: String,
-    enum: ['create', 'improve'],
+    enum: ['create', 'improve', 'delete'],
     required: true
   },
   player: {

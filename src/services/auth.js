@@ -53,7 +53,7 @@ export const register = async (req, res) => {
             username: savedPlayer.username,
         };
         
-        const token = jwt.sign(playerForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(playerForToken, process.env.JWT_SECRET, { expiresIn: '48h' });
         res.status(201).json({ player: savedPlayer, token });
     } catch (error) {
         console.error(error);

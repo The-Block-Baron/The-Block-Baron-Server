@@ -10,8 +10,7 @@ const companySchema = new Schema({
   },
   type: {
     type: String,
-    enum: ['Agriculture', 'Mining', 'Manufacturing', 'Entertainment', 'Technology', 'Services', 'Finance', 'Retail', 'RealEstate', 'HealthCare'],
-    required: true
+    required: true,
   },
   level: {
     type: Number,

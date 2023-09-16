@@ -1,0 +1,101 @@
+{
+    "name": "Adventureanch",
+    "description": "A hub for exploration and opportunities, with adventures and missions to unlock potential and rewards.",
+    "taxes": {
+      "incomeTax": 9
+    },
+    "availableCompanies": [
+      {
+        "type": "Travel",
+          "buildCost": 250,
+          "upgradeCost": [125, 250, 375, 500],
+          "buildTime": 90,
+          "upgradeTime": [45, 90, 135, 180],
+          "incomePerHour": [25, 50, 75, 100, 125],
+          "closeCost": 70
+      },
+      {
+        "type": "Adventure Park",
+          "buildCost": 1280,
+          "upgradeCost": [140, 280, 420, 560],
+          "buildTime": 100,
+          "upgradeTime": [50, 100, 150, 200],
+          "incomePerHour": [28, 56, 84, 112, 140],
+          "closeCost": 75
+      },
+      {
+        "type": "Exploration Firm",
+          "buildCost": 300,
+          "upgradeCost": [150, 300, 450, 600],
+          "buildTime": 110,
+          "upgradeTime": [55, 110, 165, 220],
+          "incomePerHour": [30, 60, 90, 120, 150],
+          "closeCost": 80
+        
+      },
+      {
+        "type": "Safari Tours",
+          "buildCost": 270,
+          "upgradeCost": [135, 270, 405, 540],
+          "buildTime": 105,
+          "upgradeTime": [53, 105, 158, 210],
+          "incomePerHour": [27, 54, 81, 108, 135],
+          "closeCost": 73
+        },
+      {
+        "type": "Outdoor Equipment Rental",
+
+          "buildCost": 220,
+          "upgradeCost": [110, 220, 330, 440],
+          "buildTime": 80,
+          "upgradeTime": [40, 80, 120, 160],
+          "incomePerHour": [22, 44, 66, 88, 110],
+          "closeCost": 60
+        
+      },
+      {
+        "type": "Survival Training Camp",
+          "buildCost": 290,
+          "upgradeCost": [145, 290, 435, 580],
+          "buildTime": 115,
+          "upgradeTime": [58, 115, 173, 230],
+          "incomePerHour": [29, 58, 87, 116, 145],
+          "closeCost": 78
+        
+      },
+      {
+        "type": "Scuba Diving Center",
+
+          "buildCost": 310,
+          "upgradeCost": [155, 310, 465, 620],
+          "buildTime": 120,
+          "upgradeTime": [60, 120, 180, 240],
+          "incomePerHour": [31, 62, 93, 124, 155],
+          "closeCost": 83
+        },
+      
+      {
+        "type": "Mountain Climbing School",
+
+          "buildCost": 330,
+          "upgradeCost": [165, 330, 495, 660],
+          "buildTime": 125,
+          "upgradeTime": [63, 125, 188, 250],
+          "incomePerHour": [33, 66, 99, 132, 165],
+          "closeCost": 88
+        
+      },
+      {
+        "type": "Treasure Hunt Organizer",
+
+          "buildCost": 260,
+          "upgradeCost": [130, 260, 390, 520],
+          "buildTime": 95,
+          "upgradeTime": [48, 95, 143, 190],
+          "incomePerHour": [26, 52, 78, 104, 130],
+          "closeCost": 70
+        
+      }
+    ]
+  }
+  

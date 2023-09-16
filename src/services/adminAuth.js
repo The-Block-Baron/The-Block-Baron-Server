@@ -54,7 +54,7 @@ export const adminRegister = async (req, res) => {
             username: savedAdmin.username,
         };
         
-        const token = jwt.sign(adminForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(adminForToken, process.env.JWT_SECRET, { expiresIn: '24h' });
         res.status(201).json({ admin: savedAdmin, token });
     } catch (error) {
         console.error(error);

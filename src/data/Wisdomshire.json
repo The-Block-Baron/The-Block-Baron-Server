@@ -1,0 +1,119 @@
+{
+    "name": "Wisdomshire",
+    "description": "A hub of knowledge and strategic brilliance, centering scholars and thinkers who thrive on wisdom.",
+    "taxes": {
+      "incomeTax": 12
+    },
+    "availableCompanies": [
+      {
+        "type": "Technology",
+
+          "buildCost": 400,
+          "upgradeCost": [200, 400, 600, 800],
+          "buildTime": 120,
+          "upgradeTime": [60, 120, 180, 240],
+          "incomePerHour": [40, 80, 120, 160, 200],
+          "closeCost": 100
+        
+      },
+      {
+        "type": "Finance",
+
+          "buildCost": 370,
+          "upgradeCost": [190, 380, 570, 760],
+          "buildTime": 113,
+          "upgradeTime": [57, 113, 170, 226],
+          "incomePerHour": [38, 76, 114, 152, 190],
+          "closeCost": 95
+        
+      },
+      {
+        "type": "Healthcare",
+
+          "buildCost": 320,
+          "upgradeCost": [160, 320, 480, 640],
+          "buildTime": 100,
+          "upgradeTime": [50, 100, 150, 200],
+          "incomePerHour": [33, 66, 99, 132, 165],
+          "closeCost": 85
+        
+      },
+      {
+        "type": "Services",
+
+          "buildCost": 290,
+          "upgradeCost": [145, 290, 435, 580],
+          "buildTime": 90,
+          "upgradeTime": [45, 90, 135, 180],
+          "incomePerHour": [30, 60, 90, 120, 150],
+          "closeCost": 75
+        
+      },
+      {
+        "type": "Education",
+ 
+          "buildCost": 450,
+          "upgradeCost": [225, 450, 675, 900],
+          "buildTime": 135,
+          "upgradeTime": [68, 135, 202, 270],
+          "incomePerHour": [45, 90, 135, 180, 225],
+          "closeCost": 120
+        
+      },
+      {
+        "type": "Retail",
+
+          "buildCost": 220,
+          "upgradeCost": [110, 220, 330, 440],
+          "buildTime": 85,
+          "upgradeTime": [43, 85, 128, 170],
+          "incomePerHour": [23, 46, 69, 92, 115],
+          "closeCost": 60
+        
+      },
+      {
+        "type": "Real Estate",
+
+          "buildCost": 530,
+          "upgradeCost": [265, 530, 795, 1060],
+          "buildTime": 138,
+          "upgradeTime": [69, 138, 207, 276],
+          "incomePerHour": [55, 110, 165, 220, 275],
+          "closeCost": 130
+
+      },
+      {
+        "type": "Manufacturing",
+
+          "buildCost": 160,
+          "upgradeCost": [80, 160, 240, 320],
+          "buildTime": 75,
+          "upgradeTime": [38, 75, 112, 150],
+          "incomePerHour": [17, 34, 51, 68, 85],
+          "closeCost": 55
+
+      },
+      {
+        "type": "Agriculture",
+
+          "buildCost": 110,
+          "upgradeCost": [55, 110, 165, 220],
+          "buildTime": 65,
+          "upgradeTime": [33, 65, 98, 130],
+          "incomePerHour": [12, 24, 36, 48, 60],
+          "closeCost": 35
+
+      },
+      {
+        "type": "Entertainment",
+          "buildCost": 310,
+          "upgradeCost": [155, 310, 465, 620],
+          "buildTime": 97,
+          "upgradeTime": [49, 97, 146, 194],
+          "incomePerHour": [32, 64, 96, 128, 160],
+          "closeCost": 80
+
+      }
+    ]
+  }
+  
