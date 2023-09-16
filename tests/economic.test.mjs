@@ -185,12 +185,7 @@ describe('Economic tests', () => {
                 expect(updatedPlayer.income).to.be.above(200);
                 done();
               });
-          });
-        
-
-
-          
-          
+          });          
 
       })
     
