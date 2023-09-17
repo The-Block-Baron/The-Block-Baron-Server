@@ -20,11 +20,11 @@ const seedDB = async () => {
 
     // Data to seed
     const players = [
-      { username: 'Dipri', income: 200, inGameTokens: 400, email: 'dipri@email.com', password: '123456' },
-      { username: 'Psylow', income: 200, inGameTokens: 200, email: 'psylow@email.com', password: '123456' },
-      { username: 'Kriptonix', income: 200, inGameTokens: 100, email: 'kriptonix@email.com', password: '123456' },
-      { username: 'Zypher', income: 200, inGameTokens: 50, email: 'zypher@email.com', password: '123456' },
-      { username: 'Perriqui', income: 200, inGameTokens: 25, email: 'perriqui@email.com', password: '123456' },
+      { username: 'Dipri', baseIncome: 200, companyIncome: 0, inGameTokens: 400, email: 'dipri@email.com', password: '123456' },
+      { username: 'Psylow', baseIncome: 200, companyIncome: 0, inGameTokens: 200, email: 'psylow@email.com', password: '123456' },
+      { username: 'Kriptonix', baseIncome: 200, companyIncome: 0, inGameTokens: 100, email: 'kriptonix@email.com', password: '123456' },
+      { username: 'Zypher', baseIncome: 200, companyIncome: 0, inGameTokens: 50, email: 'zypher@email.com', password: '123456' },
+      { username: 'Perriqui', baseIncome: 200, companyIncome: 0, inGameTokens: 25, email: 'perriqui@email.com', password: '123456' },
     ];
 
     // Add new players
