@@ -20,9 +20,14 @@ const playerSchema = new Schema({
         type: String,
         required: true
     },
-    income: {
+    baseIncome: {
         type: Number,
         default: 200, 
+        min: 0
+    },
+    companyIncome: {
+        type: Number,
+        default: 0,
         min: 0
     },
     inGameTokens: {
@@ -37,6 +42,13 @@ const playerSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Company'
     }],
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+});
+
+playerSchema.virtual('totalIncome').get(function() {
+    return this.baseIncome + this.companyIncome;
 });
 
 playerSchema.pre('save', async function(next) {

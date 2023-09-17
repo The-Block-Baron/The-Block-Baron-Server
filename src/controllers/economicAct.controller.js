@@ -78,7 +78,7 @@ export const buildCompany = async (req, res) => {
     state.builtCompanies.push(newCompany._id);
     await state.save();
 
-    player.income += newCompany.incomePerHour; 
+    player.companyIncome += newCompany.incomePerHour; 
 
     player.Companies.push(newCompany._id);
     await player.save();
@@ -139,7 +139,8 @@ export const improveCompany = async (req, res) => {
       player.inGameTokens -= upgradeCost;
     }
 
-    player.income += (typeDetails.incomePerHour[company.level] - typeDetails.incomePerHour[company.level - 1]);
+    player.companyIncome += (typeDetails.incomePerHour[company.level] - typeDetails.incomePerHour[company.level - 1]);
+    player.totalIncome = player.baseIncome + player.companyIncome;
     
     company.level += 1;
     company.incomePerHour = typeDetails.incomePerHour[company.level - 1];
