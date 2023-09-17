@@ -8,7 +8,7 @@ async function updatePlayerTokens() {
     try {
         const players = await Player.find({ isActive: true });
         players.forEach(async (player) => {
-            player.inGameTokens += player.income;
+            player.inGameTokens += player.totalIncome;
             await player.save();
             console.log(`Tokens actualizados para ${player.username}.`);
         });
