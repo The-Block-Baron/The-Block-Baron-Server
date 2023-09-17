@@ -79,10 +79,15 @@ export const deletePlayer = async (req, res) => {
     for (const company of companiesToDelete) {
       const stateId = company.state;
       const state = await State.findById(stateId);
-      
-      // Aquí eliminamos la referencia a la compañía en el array `companies` del estado
-      state.companies.pull(company._id);
-      await state.save();
+
+      console.log(state)
+    
+      if (state) {
+        state.builtCompanies.pull(company._id);
+        await state.save();
+      } else {
+        console.error(`State not found for stateId: ${stateId}, companyId: ${company._id}`);
+      }
     }
 
     // Elimina todas las compañías asociadas con el jugador
