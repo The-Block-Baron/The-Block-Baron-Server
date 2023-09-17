@@ -131,10 +131,10 @@ export const improveCompany = async (req, res) => {
 
     const upgradeCost = typeDetails.upgradeCost[company.level - 1];  // assuming level starts at 1
     
-    if (player.inGameTokens < upgradeCost) {
+    if (role === 'player' && player.inGameTokens < upgradeCost) {
       return res.status(400).json({ error: 'Not enough tokens' });
     }
-
+    
     if (role === 'player') {
       player.inGameTokens -= upgradeCost;
     }
