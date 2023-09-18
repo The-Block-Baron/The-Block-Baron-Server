@@ -60,6 +60,7 @@ export const buildCompany = async (req, res) => {
       ownerId: playerId,
       buildCost: companyDetails.buildCost,
       upgradeCost: companyDetails.upgradeCost,
+      buyingPrice: companyDetails.buyingPrice[0],
       buildTime: companyDetails.buildTime,
       upgradeTime: companyDetails.upgradeTime,
     });
@@ -154,6 +155,7 @@ export const improveCompany = async (req, res) => {
     
     company.level += 1;
     company.incomePerHour = typeDetails.incomePerHour[company.level - 1];
+    company.buyingPrice = typeDetails.buyingPrice[company.level - 1];
     
     await company.save();
     await player.save();
@@ -227,6 +229,93 @@ export const closeCompany = async (req, res) => {
     await state.save();
     
     res.status(200).json({ message: 'Company deleted', player });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+export const buyCompany = async (req, res) => {
+  try {
+    const { companyId, id: buyerId } = req.params;
+    const { sellerId } = req.body;
+    const { role, id: userId } = req.user;
+
+    // Fetch the company details using companyId
+    const company = await Company.findById(companyId);
+
+    if (!company) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    // Ensure the company belongs to the seller
+    if(String(company.ownerId) !== String(sellerId)) {
+      return res.status(403).json({ error: 'Company does not belong to the seller' });
+    }
+
+    // Fetch the buyer and seller details
+    const buyer = await Player.findById(buyerId);
+    const seller = await Player.findById(sellerId);
+
+    if (!buyer || !seller) {
+      return res.status(404).json({ error: 'Buyer or Seller not found' });
+    }
+
+
+    // Check if the buyer has enough tokens to buy the company
+
+    const buyingPrice = company.buyingPrice
+
+    if(buyingPrice === undefined) {
+      return res.status(400).json({ error: 'Buying price not defined for the current company level' });
+    }
+
+    if (role === 'player' && String(buyerId) !== String(userId)) {
+      return res.status(403).json({ error: 'Unauthorized to buy this company' });
+    }
+
+    if (role !== 'admin' && buyer.inGameTokens < buyingPrice) {
+      return res.status(400).json({ error: 'Not enough tokens' });
+    }
+
+// ...
+
+
+    // Deduct the buying price from the buyer's tokens if not admin
+    if(role !== 'admin') {
+      buyer.inGameTokens -= buyingPrice;
+    }
+
+    // Calculate the amount the seller receives after tax
+    const state = await State.findById(company.state);
+    const sellerReceives = buyingPrice - (buyingPrice * state.taxes / 100);
+    
+    seller.inGameTokens += sellerReceives;
+
+    // Adjust the income of the buyer
+    const taxedIncomePerHour = company.incomePerHour - (company.incomePerHour * state.taxes / 100);
+    seller.companyIncome -= taxedIncomePerHour; 
+    buyer.companyIncome += taxedIncomePerHour; 
+    buyer.totalIncome = buyer.baseIncome + buyer.companyIncome;
+    seller.totalIncome = seller.baseIncome + seller.companyIncome;
+
+    // Change the ownership of the company
+    company.ownerId = buyer._id;
+
+    // Remove the company from the seller's list of owned companies
+    seller.Companies = seller.Companies.filter(companyId => String(companyId) !== String(company._id));
+
+    // Add the company to the buyer's list of owned companies
+    buyer.Companies.push(company._id);
+
+
+    // Save the changes
+    await buyer.save();
+    await seller.save();
+    await company.save();
+
+    // Respond with success and the updated company details
+    res.status(200).json({ message: 'Company bought successfully', company });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
