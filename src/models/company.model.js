@@ -28,6 +28,10 @@ const companySchema = new Schema({
     type: Array,
     required: true
   },
+  buyingPrice: {
+    type: Number, 
+    required: true
+  },
   buildTime: {
     type: Number, // Tiempo en minutos
     required: true

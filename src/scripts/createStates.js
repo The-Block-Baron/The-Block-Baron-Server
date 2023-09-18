@@ -3,10 +3,10 @@ import dotenv from 'dotenv'
 import State from '../models/state.model.js';
 
 import Adventure from '../data/Adventureanch.json' assert { type: 'json' };
-import Fortune from '../data/Fortuneholt.json' assert { type: 'json' };
-import Harmony from '../data/Harmonyhaven.json' assert { type: 'json' };
-import Valor from '../data/Valorstead.json' assert { type: 'json' };
-import Wisdom from '../data/Wisdomshire.json' assert { type: 'json' };
+// import Fortune from '../data/Fortuneholt.json' assert { type: 'json' };
+// import Harmony from '../data/Harmonyhaven.json' assert { type: 'json' };
+// import Valor from '../data/Valorstead.json' assert { type: 'json' };
+// import Wisdom from '../data/Wisdomshire.json' assert { type: 'json' };
 
 
 
@@ -24,10 +24,10 @@ async function createStates() {
     // Create new State data
     const statesData = [
       Adventure,
-      Fortune,
-      Harmony,
-      Valor,
-      Wisdom,
+      // Fortune,
+      // Harmony,
+      // Valor,
+      // Wisdom,
     ];
     
     await State.insertMany(statesData);

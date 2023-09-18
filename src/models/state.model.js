@@ -9,6 +9,7 @@ const companyDetailsSchema = new Schema({
   buildTime: Number,
   upgradeTime: [Number],
   incomePerHour: [Number],
+  buyingPrice: [Number],
   closeCost: Number
 }, { _id: false });
 
