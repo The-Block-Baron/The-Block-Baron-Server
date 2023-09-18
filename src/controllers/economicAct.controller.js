@@ -243,6 +243,7 @@ export const buyCompany = async (req, res) => {
 
     // Fetch the company details using companyId
     const company = await Company.findById(companyId);
+
     if (!company) {
       return res.status(404).json({ error: 'Company not found' });
     }
@@ -260,8 +261,15 @@ export const buyCompany = async (req, res) => {
       return res.status(404).json({ error: 'Buyer or Seller not found' });
     }
 
+
     // Check if the buyer has enough tokens to buy the company
-    const buyingPrice = company.buyingPrice[company.level - 1];
+
+    const buyingPrice = company.buyingPrice
+
+    if(buyingPrice === undefined) {
+      return res.status(400).json({ error: 'Buying price not defined for the current company level' });
+    }
+
     if (role === 'player' && String(buyerId) !== String(userId)) {
       return res.status(403).json({ error: 'Unauthorized to buy this company' });
     }
@@ -269,6 +277,9 @@ export const buyCompany = async (req, res) => {
     if (role !== 'admin' && buyer.inGameTokens < buyingPrice) {
       return res.status(400).json({ error: 'Not enough tokens' });
     }
+
+// ...
+
 
     // Deduct the buying price from the buyer's tokens if not admin
     if(role !== 'admin') {
@@ -290,6 +301,13 @@ export const buyCompany = async (req, res) => {
 
     // Change the ownership of the company
     company.ownerId = buyer._id;
+
+    // Remove the company from the seller's list of owned companies
+    seller.Companies = seller.Companies.filter(companyId => String(companyId) !== String(company._id));
+
+    // Add the company to the buyer's list of owned companies
+    buyer.Companies.push(company._id);
+
 
     // Save the changes
     await buyer.save();
