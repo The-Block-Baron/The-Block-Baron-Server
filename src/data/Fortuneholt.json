@@ -1,9 +1,8 @@
 {
     "name": "Fortuneholt",
     "description": "The economic heart of Baronia, a hub for trading, alliances, and financial growth.",
-    "taxes": {
-      "incomeTax": 8
-    },
+    "taxes":  8
+    ,
     "availableCompanies": [
       {
         "type": "Finance",

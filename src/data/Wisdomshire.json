@@ -1,9 +1,8 @@
 {
     "name": "Wisdomshire",
     "description": "A hub of knowledge and strategic brilliance, centering scholars and thinkers who thrive on wisdom.",
-    "taxes": {
-      "incomeTax": 12
-    },
+    "taxes":  12
+    ,
     "availableCompanies": [
       {
         "type": "Technology",

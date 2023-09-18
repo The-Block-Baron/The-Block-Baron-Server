@@ -78,7 +78,9 @@ export const buildCompany = async (req, res) => {
     state.builtCompanies.push(newCompany._id);
     await state.save();
 
-    player.companyIncome += newCompany.incomePerHour; 
+    const taxedIncomePerHour = newCompany.incomePerHour - (newCompany.incomePerHour * state.taxes / 100);
+    player.companyIncome += taxedIncomePerHour; 
+    player.totalIncome = player.baseIncome + player.companyIncome;
 
     player.Companies.push(newCompany._id);
     await player.save();
@@ -139,7 +141,15 @@ export const improveCompany = async (req, res) => {
       player.inGameTokens -= upgradeCost;
     }
 
-    player.companyIncome += (typeDetails.incomePerHour[company.level] - typeDetails.incomePerHour[company.level - 1]);
+
+    const currentIncomePerHour = typeDetails.incomePerHour[company.level - 1];
+    const nextIncomePerHour = typeDetails.incomePerHour[company.level]; // This was potentially undefined because company.level could be 5, translating to a non-existent index 5 in a 0-4 indexed array.
+    const newIncomePerHour = nextIncomePerHour - currentIncomePerHour;
+    const taxedIncomePerHour = newIncomePerHour - (newIncomePerHour * state.taxes / 100);
+
+
+
+    player.companyIncome += taxedIncomePerHour;
     player.totalIncome = player.baseIncome + player.companyIncome;
     
     company.level += 1;
@@ -200,8 +210,13 @@ export const closeCompany = async (req, res) => {
     if (role === 'player') {
       player.inGameTokens -= deleteCost;  // Corrected from upgradeCost to deleteCost
     }
-    
-    player.income -= company.incomePerHour;
+
+    const taxedIncomePerHour = company.incomePerHour - (company.incomePerHour * state.taxRate / 100);
+
+    player.companyIncome -= taxedIncomePerHour;
+    player.totalIncome = player.baseIncome + player.companyIncome;
+
+  
     player.Companies = player.Companies.filter(id => !id.equals(company._id));
     
     // Remove the company ID from the state's list of built companies

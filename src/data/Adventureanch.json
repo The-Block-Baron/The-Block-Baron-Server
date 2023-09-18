@@ -1,9 +1,7 @@
 {
     "name": "Adventureanch",
     "description": "A hub for exploration and opportunities, with adventures and missions to unlock potential and rewards.",
-    "taxes": {
-      "incomeTax": 9
-    },
+    "taxes": 9,
     "availableCompanies": [
       {
         "type": "Travel",
