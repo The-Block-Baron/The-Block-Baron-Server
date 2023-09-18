@@ -141,8 +141,13 @@ export const improveCompany = async (req, res) => {
       player.inGameTokens -= upgradeCost;
     }
 
-    const newIncomePerHour = typeDetails.incomePerHour[company.level] - typeDetails.incomePerHour[company.level - 1];
-    const taxedIncomePerHour = newIncomePerHour - (newIncomePerHour * state.taxRate / 100);
+
+    const currentIncomePerHour = typeDetails.incomePerHour[company.level - 1];
+    const nextIncomePerHour = typeDetails.incomePerHour[company.level]; // This was potentially undefined because company.level could be 5, translating to a non-existent index 5 in a 0-4 indexed array.
+    const newIncomePerHour = nextIncomePerHour - currentIncomePerHour;
+    const taxedIncomePerHour = newIncomePerHour - (newIncomePerHour * state.taxes / 100);
+
+
 
     player.companyIncome += taxedIncomePerHour;
     player.totalIncome = player.baseIncome + player.companyIncome;
