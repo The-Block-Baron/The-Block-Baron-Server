@@ -53,16 +53,16 @@ export const buildCompany = async (req, res) => {
 
     const newCompany = new Company({
       name: fictionalName,
-      level: 1,
+      level: companyDetails.level[0],
       state: stateId,
       incomePerHour: companyDetails.incomePerHour[0], 
       type: companyType,
       ownerId: playerId,
       buildCost: companyDetails.buildCost,
-      upgradeCost: companyDetails.upgradeCost,
+      upgradeCost: companyDetails.upgradeCost[0],
       buyingPrice: companyDetails.buyingPrice[0],
-      buildTime: companyDetails.buildTime,
-      upgradeTime: companyDetails.upgradeTime,
+      buildTime: companyDetails.buildTime[0],
+      upgradeTime: companyDetails.upgradeTime[0],
     });
 
     await newCompany.save();
@@ -155,7 +155,10 @@ export const improveCompany = async (req, res) => {
     
     company.level += 1;
     company.incomePerHour = typeDetails.incomePerHour[company.level - 1];
+    company.upgradeCost = typeDetails.incomePerHour[company.level - 1];
     company.buyingPrice = typeDetails.buyingPrice[company.level - 1];
+    company.buildTime = typeDetails.buyingPrice[company.level - 1];
+    company.upgradeTime = typeDetails.buyingPrice[company.level - 1];
     
     await company.save();
     await player.save();
@@ -320,3 +323,5 @@ export const buyCompany = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+

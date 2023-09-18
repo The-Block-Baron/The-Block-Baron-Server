@@ -6,10 +6,11 @@ const companyDetailsSchema = new Schema({
   type: String,
   buildCost: Number,
   upgradeCost: [Number],
-  buildTime: Number,
+  buildTime: [Number],
   upgradeTime: [Number],
   incomePerHour: [Number],
   buyingPrice: [Number],
+  level: [Number],
   closeCost: Number
 }, { _id: false });
 
