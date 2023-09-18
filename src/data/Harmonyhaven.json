@@ -1,9 +1,8 @@
 {
     "name": "Harmonyhaven",
     "description": "A place of peace, unity, and collaboration, fostering friendships and alliances.",
-    "taxes": {
-      "incomeTax": 7
-    },
+    "taxes":  7,
+  
     "availableCompanies": [
       {
         "type": "Entertainment",

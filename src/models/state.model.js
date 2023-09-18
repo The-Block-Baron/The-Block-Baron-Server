@@ -23,10 +23,8 @@ const stateSchema = new Schema({
     required: true,
   },
   taxes: {
-    incomeTax: {
       type: Number,
       default: 10 
-    },
   },
   availableCompanies: [companyDetailsSchema],
   builtCompanies: [

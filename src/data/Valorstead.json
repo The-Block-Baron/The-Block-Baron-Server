@@ -1,9 +1,8 @@
 {
     "name": "Valorstead",
     "description": "A place revered for fostering courage and bravery, home to heroes and gallant individuals constantly striving for more.",
-    "taxes": { 
-        "incomeTax": 10 
-    },
+    "taxes":  10 
+    ,
     "availableCompanies": [
         {
             "type": "Agriculture",

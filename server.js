@@ -16,6 +16,8 @@ import authRouter from './src/routes/auth.routes.js';
 
 dotenv.config();
 
+let server;
+
 const app = express();
 const { PORT, CONNECTION_URI } = process.env;
 const port = PORT || 2100;
@@ -37,6 +39,7 @@ app.use((err, req, res, next) => {
 // Endpoint básico
 app.get('/', () => {
     console.log('Servidor de Blockchain Baron en marcha');
+    res.send('Servidor de Blockchain Baron en marcha'); 
 });
 
 app.use('/api/v1', playerRoutes)
@@ -71,7 +74,7 @@ export const startServer = async () => {
     try {
         console.log("Intentando conectar a MongoDB y arrancar el servidor...");
         await connection();
-        app.listen(port, () => {
+        server = app.listen(port, () => {
             console.log(`Servidor de Blockchain Baron corriendo en http://localhost:${port} 🔥🎮`);
         });
     } catch (error) {
