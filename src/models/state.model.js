@@ -11,6 +11,9 @@ const companyDetailsSchema = new Schema({
   incomePerHour: [Number],
   buyingPrice: [Number],
   level: [Number],
+  protectionPrices: [Schema.Types.Mixed],
+  protectionLevel: [Number],
+  protectionCost: [Number],
   closeCost: Number
 }, { _id: false });
 

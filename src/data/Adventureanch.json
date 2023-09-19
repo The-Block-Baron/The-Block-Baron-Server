@@ -12,8 +12,10 @@
       "incomePerHour": [25, 50, 75, 100, 125],
       "closeCost": 70,
       "buyingPrice": [275, 550, 825, 1100, 1375],
-      "protectionPrices": [343.75, 412.5, 550, 1100, "non-buyable"],
-      "level": [1, 2, 3 , 4, 5]
+      "protectionCost": [343.75, 412.5, 550, 1100, 1600],
+      "level": [1, 2, 3 , 4, 5],
+      "protectionLevel": [0, 1, 2, 3 , 4, 5],
+      "protectionPrices": [1, 1.25, 1.5, 2, 3, "non-buyable"]
     },
     {
       "type": "Adventure Park",
@@ -24,8 +26,10 @@
       "incomePerHour": [28, 56, 84, 112, 140],
       "closeCost": 75,
       "buyingPrice": [1400, 2800, 4200, 5600, 7000],
-      "protectionPrices": [1750, 2100, 2800, 5600, "non-buyable"],
-      "level": [1, 2, 3 , 4, 5]
+      "protectionCost": [1750, 2100, 2800, 5600, 7200],
+      "level": [1, 2, 3 , 4, 5],
+      "protectionLevel": [0, 1, 2, 3 , 4, 5],
+      "protectionPrices": [1, 1.25, 1.5, 2, 3, "non-buyable"]
     },
     {
       "type": "Exploration Firm",
@@ -36,8 +40,10 @@
       "incomePerHour": [30, 60, 90, 120, 150],
       "closeCost": 80,
       "buyingPrice": [330, 660, 990, 1320, 1650],
-      "protectionPrices": [412.5, 495, 660, 1320, "non-buyable"],
-      "level": [1, 2, 3 , 4, 5]
+      "protectionCost": [412.5, 495, 660, 1320, 2200],
+      "level": [1, 2, 3 , 4, 5],
+      "protectionLevel": [0, 1, 2, 3 , 4, 5],
+      "protectionPrices": [1, 1.25, 1.5, 2, 3, "non-buyable"]
     },
     {
       "type": "Safari Tours",
@@ -48,8 +54,10 @@
       "incomePerHour": [27, 54, 81, 108, 135],
       "closeCost": 73,
       "buyingPrice": [297, 594, 891, 1188, 1485],
-      "protectionPrices": [371.25, 445.5, 594, 1188, "non-buyable"],
-      "level": [1, 2, 3 , 4, 5]
+      "protectionCost": [371.25, 445.5, 594, 1188, 1900],
+      "level": [1, 2, 3 , 4, 5],
+      "protectionLevel": [0, 1, 2, 3 , 4, 5],
+      "protectionPrices": [1, 1.25, 1.5, 2, 3, "non-buyable"]
     },
     {
       "type": "Outdoor Equipment Rental",
@@ -60,8 +68,10 @@
       "incomePerHour": [22, 44, 66, 88, 110],
       "closeCost": 60,
       "buyingPrice": [242, 484, 726, 968, 1210],
-      "protectionPrices": [302.5, 363, 484, 968, "non-buyable"],
-      "level": [1, 2, 3 , 4, 5]
+      "protectionCost": [302.5, 363, 484, 968, 1500],
+      "level": [1, 2, 3 , 4, 5],
+      "protectionLevel": [0, 1, 2, 3 , 4, 5],
+      "protectionPrices": [1, 1.25, 1.5, 2, 3, "non-buyable"]
     },
     {
       "type": "Survival Training Camp",
@@ -72,8 +82,10 @@
       "incomePerHour": [29, 58, 87, 116, 145],
       "closeCost": 78,
       "buyingPrice": [319, 638, 957, 1276, 1595],
-      "protectionPrices": [398.75, 478.5, 638, 1276, "non-buyable"],
-      "level": [1, 2, 3 , 4, 5]
+      "protectionCost": [398.75, 478.5, 638, 1276, 1800],
+      "level": [1, 2, 3 , 4, 5],
+      "protectionLevel": [0, 1, 2, 3 , 4, 5],
+      "protectionPrices": [1, 1.25, 1.5, 2, 3, "non-buyable"]
     },
     {
       "type": "Scuba Diving Center",
@@ -84,8 +96,10 @@
       "incomePerHour": [31, 62, 93, 124, 155],
       "closeCost": 83,
       "buyingPrice": [341, 682, 1023, 1364, 1705],
-      "protectionPrices": [426.25, 511.5, 682, 1364, "non-buyable"],
-      "level": [1, 2, 3 , 4, 5]
+      "protectionCost": [426.25, 511.5, 682, 1364, "non-buyable"],
+      "level": [1, 2, 3 , 4, 5],
+      "protectionLevel": [0, 1, 2, 3 , 4, 5],
+      "protectionPrices": [1, 1.25, 1.5, 2, 3, "non-buyable"]
     },
     {
       "type": "Mountain Climbing School",
@@ -96,8 +110,10 @@
       "incomePerHour": [33, 66, 99, 132, 165],
       "closeCost": 88,
       "buyingPrice": [363, 726, 1089, 1452, 1815],
-      "protectionPrices": [453.75, 544.5, 726, 1452, "non-buyable"],
-      "level": [1, 2, 3 , 4, 5]
+      "protectionCost": [453.75, 544.5, 726, 1452, 2100],
+      "level": [1, 2, 3 , 4, 5],
+      "protectionLevel": [0, 1, 2, 3 , 4, 5],
+      "protectionPrices": [1, 1.25, 1.5, 2, 3, "non-buyable"]
     },
     {
       "type": "Treasure Hunt Organizer",
@@ -107,9 +123,11 @@
       "upgradeTime": [48, 95, 143, 190],
       "incomePerHour": [26, 52, 78, 104, 130],
       "closeCost": 70,
+      "level": [1, 2, 3 , 4, 5],
       "buyingPrice": [286, 572, 858, 1144, 1430],
-      "protectionPrices": [357.5, 429, 572, 1144, "non-buyable"],
-      "level": [1, 2, 3 , 4, 5]
+      "protectionCost": [357.5, 429, 572, 1144, 1900],
+      "protectionPrices": [1, 1.25, 1.5, 2, 3, "non-buyable"],
+      "protectionLevel": [0, 1, 2, 3 , 4, 5]
     }
   ]
 }

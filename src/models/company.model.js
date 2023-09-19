@@ -32,6 +32,18 @@ const companySchema = new Schema({
     type: Number, 
     required: true
   },
+  protectionPrices: {
+    type: Number, 
+    required: true
+  },
+  protectionLevel: {
+    type: Number, 
+    required: true
+  },
+  protectionCost: {
+    type: Number, 
+    required: true
+  },
   buildTime: {
     type: Number, // Tiempo en minutos
     required: true
