@@ -331,8 +331,7 @@ export const buyCompany = async (req, res) => {
 
 export const protectCompany = async (req, res) => {
   try {
-    const { companyId } = req.params;
-    const { playerId } = req.body;
+    const { companyId, id: playerId } = req.params;
     const { role, id: userId } = req.user;
 
     // Fetch the company and player details using companyId and playerId
@@ -353,9 +352,30 @@ export const protectCompany = async (req, res) => {
       return res.status(400).json({ error: 'Company protection level cannot be increased further' });
     }
 
-    // Get protection cost and price from company details
-    const protectionCost = companyDetails.protectionCost[company.protectionLevel];
-    const protectionPriceMultiplier = companyDetails.protectionPrices[company.protectionLevel];
+    // Fetch the state of the company to get availableCompanies
+    const state = await State.findById(company.state);
+    if (!state) {
+      return res.status(404).json({ error: 'State not found' });
+    }
+
+    // Find the typeDetails for the company's type from availableCompanies
+    const typeDetails = state.availableCompanies.find(comp => comp.type === company.type);
+    if (!typeDetails) {
+      return res.status(404).json({ error: 'Company details not found' });
+    }
+
+    // Get protection cost and price from typeDetails
+    const protectionCost = typeDetails.protectionCost[company.protectionLevel];
+    const protectionPriceMultiplier = typeDetails.protectionPrices[company.protectionLevel];
+
+    // Validate protectionCost and protectionPriceMultiplier
+    if (isNaN(protectionCost) || typeof protectionCost !== 'number') {
+      return res.status(400).json({ error: 'Invalid protection cost' });
+    }
+
+    if (isNaN(protectionPriceMultiplier) || typeof protectionPriceMultiplier !== 'number') {
+      return res.status(400).json({ error: 'Invalid protection price multiplier' });
+    }
 
     // Check if the player has enough tokens (if not admin)
     if (role !== 'admin' && player.inGameTokens < protectionCost) {
@@ -368,9 +388,16 @@ export const protectCompany = async (req, res) => {
       await player.save();
     }
 
-    // Update the company's protection level and buying price
+    // Update the company's protection level, buying price, and protection cost
     company.protectionLevel += 1;
-    company.buyingPrice *= protectionPriceMultiplier;
+
+    if (protectionPriceMultiplier !== "non-buyable") {
+      company.buyingPrice *= protectionPriceMultiplier;
+    }
+
+    if (company.protectionLevel < 5) {
+      company.protectionCost = typeDetails.protectionCost[company.protectionLevel];
+    }
 
     // Save the changes
     await company.save();

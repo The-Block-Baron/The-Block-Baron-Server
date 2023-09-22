@@ -13,7 +13,7 @@ const companyDetailsSchema = new Schema({
   level: [Number],
   protectionPrices: [Schema.Types.Mixed],
   protectionLevel: [Number],
-  protectionCost: [Number],
+  protectionCost: [Schema.Types.Mixed],
   closeCost: Number
 }, { _id: false });
 
