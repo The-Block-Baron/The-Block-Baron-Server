@@ -25,10 +25,22 @@ const companySchema = new Schema({
     required: true
   },
   upgradeCost: {
-    type: Array,
+    type: Number,
     required: true
   },
   buyingPrice: {
+    type: Number, 
+    required: true
+  },
+  protectionPrices: {
+    type: Number, 
+    required: true
+  },
+  protectionLevel: {
+    type: Number, 
+    required: true
+  },
+  protectionCost: {
     type: Number, 
     required: true
   },
@@ -37,7 +49,7 @@ const companySchema = new Schema({
     required: true
   },
   upgradeTime: {
-    type: Array, // Tiempo en minutos
+    type: Number, // Tiempo en minutos
     required: true
   },
   isActive: {

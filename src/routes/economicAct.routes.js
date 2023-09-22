@@ -1,5 +1,5 @@
 import express from 'express';
-import { getEconomicActivitiesTypes, buildCompany, improveCompany, closeCompany, buyCompany } from '../controllers/economicAct.controller.js';
+import { getEconomicActivitiesTypes, buildCompany, improveCompany, closeCompany, buyCompany, protectCompany } from '../controllers/economicAct.controller.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 import adminAuthMiddleware from '../middlewares/adminAuthMiddleware.js';
 
@@ -10,12 +10,14 @@ router.post('/admin/players/:id/economic-activities/build', adminAuthMiddleware,
 router.put('/admin/players/:id/economic-activities/improve/:companyId', adminAuthMiddleware, improveCompany);
 router.delete('/admin/players/:id/economic-activities/delete/:companyId', adminAuthMiddleware, closeCompany);
 router.post('/admin/players/:id/economic-activities/buy-company/:companyId', adminAuthMiddleware, buyCompany);
+router.put('/admin/players/:id/economic-activities/protect-company/:companyId', adminAuthMiddleware, protectCompany);
 
 router.get('/economic-activities', authMiddleware, getEconomicActivitiesTypes);
 router.post('/players/:id/economic-activities/build', authMiddleware, buildCompany);
 router.put('/players/:id/economic-activities/improve/:companyId', authMiddleware, improveCompany);
 router.delete('/players/:id/economic-activities/delete/:companyId', authMiddleware, closeCompany);
 router.post('/players/:id/economic-activities/buy-company/:companyId', authMiddleware, buyCompany);
+router.put('/players/:id/economic-activities/protect-company/:companyId', adminAuthMiddleware, protectCompany);
 
 
 

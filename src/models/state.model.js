@@ -6,10 +6,14 @@ const companyDetailsSchema = new Schema({
   type: String,
   buildCost: Number,
   upgradeCost: [Number],
-  buildTime: Number,
+  buildTime: [Number],
   upgradeTime: [Number],
   incomePerHour: [Number],
   buyingPrice: [Number],
+  level: [Number],
+  protectionPrices: [Schema.Types.Mixed],
+  protectionLevel: [Number],
+  protectionCost: [Schema.Types.Mixed],
   closeCost: Number
 }, { _id: false });
 

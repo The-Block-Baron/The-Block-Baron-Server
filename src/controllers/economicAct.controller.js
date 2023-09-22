@@ -53,16 +53,19 @@ export const buildCompany = async (req, res) => {
 
     const newCompany = new Company({
       name: fictionalName,
-      level: 1,
+      level: companyDetails.level[0],
       state: stateId,
       incomePerHour: companyDetails.incomePerHour[0], 
       type: companyType,
       ownerId: playerId,
       buildCost: companyDetails.buildCost,
-      upgradeCost: companyDetails.upgradeCost,
+      upgradeCost: companyDetails.upgradeCost[0],
       buyingPrice: companyDetails.buyingPrice[0],
-      buildTime: companyDetails.buildTime,
-      upgradeTime: companyDetails.upgradeTime,
+      buildTime: companyDetails.buildTime[0],
+      upgradeTime: companyDetails.upgradeTime[0],
+      protectionPrices: companyDetails.protectionPrices[0],
+      protectionLevel: companyDetails.protectionLevel[0],
+      protectionCost: companyDetails.protectionCost[0],
     });
 
     await newCompany.save();
@@ -155,7 +158,10 @@ export const improveCompany = async (req, res) => {
     
     company.level += 1;
     company.incomePerHour = typeDetails.incomePerHour[company.level - 1];
+    company.upgradeCost = typeDetails.incomePerHour[company.level - 1];
     company.buyingPrice = typeDetails.buyingPrice[company.level - 1];
+    company.buildTime = typeDetails.buyingPrice[company.level - 1];
+    company.upgradeTime = typeDetails.buyingPrice[company.level - 1];
     
     await company.save();
     await player.save();
@@ -316,6 +322,88 @@ export const buyCompany = async (req, res) => {
 
     // Respond with success and the updated company details
     res.status(200).json({ message: 'Company bought successfully', company });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+
+export const protectCompany = async (req, res) => {
+  try {
+    const { companyId, id: playerId } = req.params;
+    const { role, id: userId } = req.user;
+
+    // Fetch the company and player details using companyId and playerId
+    const company = await Company.findById(companyId);
+    const player = await Player.findById(playerId);
+
+    if (!company || !player) {
+      return res.status(404).json({ error: 'Company or Player not found' });
+    }
+
+    // Ensure the player is the owner of the company or an admin
+    if (role !== 'admin' && String(company.ownerId) !== String(playerId)) {
+      return res.status(403).json({ error: 'Not authorized to protect this company' });
+    }
+
+    // Check if the company can be protected further
+    if (company.protectionLevel >= 5) {
+      return res.status(400).json({ error: 'Company protection level cannot be increased further' });
+    }
+
+    // Fetch the state of the company to get availableCompanies
+    const state = await State.findById(company.state);
+    if (!state) {
+      return res.status(404).json({ error: 'State not found' });
+    }
+
+    // Find the typeDetails for the company's type from availableCompanies
+    const typeDetails = state.availableCompanies.find(comp => comp.type === company.type);
+    if (!typeDetails) {
+      return res.status(404).json({ error: 'Company details not found' });
+    }
+
+    // Get protection cost and price from typeDetails
+    const protectionCost = typeDetails.protectionCost[company.protectionLevel];
+    const protectionPriceMultiplier = typeDetails.protectionPrices[company.protectionLevel];
+
+    // Validate protectionCost and protectionPriceMultiplier
+    if (isNaN(protectionCost) || typeof protectionCost !== 'number') {
+      return res.status(400).json({ error: 'Invalid protection cost' });
+    }
+
+    if (isNaN(protectionPriceMultiplier) || typeof protectionPriceMultiplier !== 'number') {
+      return res.status(400).json({ error: 'Invalid protection price multiplier' });
+    }
+
+    // Check if the player has enough tokens (if not admin)
+    if (role !== 'admin' && player.inGameTokens < protectionCost) {
+      return res.status(400).json({ error: 'Not enough tokens' });
+    }
+
+    // Deduct the protection cost from the player's tokens (if not admin)
+    if (role !== 'admin') {
+      player.inGameTokens -= protectionCost;
+      await player.save();
+    }
+
+    // Update the company's protection level, buying price, and protection cost
+    company.protectionLevel += 1;
+
+    if (protectionPriceMultiplier !== "non-buyable") {
+      company.buyingPrice *= protectionPriceMultiplier;
+    }
+
+    if (company.protectionLevel < 5) {
+      company.protectionCost = typeDetails.protectionCost[company.protectionLevel];
+    }
+
+    // Save the changes
+    await company.save();
+
+    // Respond with success and the updated company details
+    res.status(200).json({ message: 'Company protected successfully', company });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
