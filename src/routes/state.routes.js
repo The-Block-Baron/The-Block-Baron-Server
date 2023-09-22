@@ -1,5 +1,9 @@
 import express from 'express';
-import { createState, getState, getStates } from '../controllers/state.controller.js';
+
+import { createState } from '../controllers/stateController/createState.js';
+import { getState } from '../controllers/stateController/getStates.js';
+import { getStates } from '../controllers/stateController/getStates.js';
+
 import authMiddleware from '../middlewares/authMiddleware.js';
 import adminAuthMiddleware from '../middlewares/adminAuthMiddleware.js';
 

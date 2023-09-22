@@ -1,6 +1,11 @@
 import express from 'express'
 
-import { toggleAllPlayersStatus, getActivePlayers, updatePlayer, deletePlayer, getPlayer } from '../controllers/player.controller.js'
+import { toggleAllPlayersStatus } from '../controllers/playerController/getPlayers.js';
+import { getActivePlayers } from '../controllers/playerController/getPlayers.js';
+import { getPlayer } from '../controllers/playerController/getPlayers.js';
+import { updatePlayer } from '../controllers/playerController/updatePlayer.js';
+import { deletePlayer } from '../controllers/playerController/deletePlayer.js';
+
 import adminAuthMiddleware from '../middlewares/adminAuthMiddleware.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 
