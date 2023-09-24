@@ -9,6 +9,7 @@ import { protectCompany } from '../controllers/economicController/protectCompany
 
 import authMiddleware from '../middlewares/authMiddleware.js';
 import adminAuthMiddleware from '../middlewares/adminAuthMiddleware.js';
+import { sabotageCompany } from '../controllers/economicController/sabotageCompany.js';
 
 const router = express.Router();
 
@@ -18,13 +19,15 @@ router.put('/admin/players/:id/economic-activities/improve/:companyId', adminAut
 router.delete('/admin/players/:id/economic-activities/delete/:companyId', adminAuthMiddleware, closeCompany);
 router.post('/admin/players/:id/economic-activities/buy-company/:companyId', adminAuthMiddleware, buyCompany);
 router.put('/admin/players/:id/economic-activities/protect-company/:companyId', adminAuthMiddleware, protectCompany);
+router.post('/admin/players/:id/economic-activities/sabotage-company/:companyId', adminAuthMiddleware, sabotageCompany);
 
 router.get('/economic-activities', authMiddleware, getEconomicActivitiesTypes);
 router.post('/players/:id/economic-activities/build', authMiddleware, buildCompany);
 router.put('/players/:id/economic-activities/improve/:companyId', authMiddleware, improveCompany);
 router.delete('/players/:id/economic-activities/delete/:companyId', authMiddleware, closeCompany);
 router.post('/players/:id/economic-activities/buy-company/:companyId', authMiddleware, buyCompany);
-router.put('/players/:id/economic-activities/protect-company/:companyId', adminAuthMiddleware, protectCompany);
+router.put('/players/:id/economic-activities/protect-company/:companyId', authMiddleware, protectCompany);
+router.post('/players/:id/economic-activities/sabotage-company/:companyId', authMiddleware, sabotageCompany);
 
 
 

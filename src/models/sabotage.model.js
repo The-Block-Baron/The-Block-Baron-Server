@@ -19,7 +19,7 @@ const sabotageSchema = new Schema({
     required: true,
   },
   sabotageCost: {
-    type: [100, 200, 400, 800, 1600], // An array of sabotage costs indexed by sabotage level
+    type: Number, 
     required: true,
   },
   createdAt: {
@@ -28,7 +28,7 @@ const sabotageSchema = new Schema({
   },
   expiresAt: {
     type: Date,
-    default: () => Date.now() + 8 * 60 * 60 * 1000, // 8 hours from creation
+    default: () => Date.now() + 8 * 60 * 60 * 1000,
   }
 });
 
