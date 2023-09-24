@@ -24,10 +24,7 @@ export const sabotageCompany = async (req, res) => {
       return res.status(400).json({ error: 'Sabotage level is not sufficient to sabotage this company' });
     }
 
-    const sabotageCost = targetCompany.sabotageCost[sabotageLevel - 1]; 
-
-    console.log('sabotageCost:', sabotageCost);
-
+    const sabotageCost = targetCompany.sabotageCost[sabotageLevel - 1];
 
     if (role !== 'admin' && saboteur.inGameTokens < sabotageCost) {
       return res.status(400).json({ error: 'Not enough tokens' });
@@ -38,17 +35,22 @@ export const sabotageCompany = async (req, res) => {
       await saboteur.save();
     }
 
+    const originalIncomePerHour = targetCompany.incomePerHour;
+    
     const sabotage = new Sabotage({
       level: sabotageLevel,
       saboteur: playerId,
       targetCompany: companyId,
-      sabotageCost: sabotageCost
+      sabotageCost: sabotageCost,
+      originalIncomePerHour: originalIncomePerHour,
     });
 
     await sabotage.save();
 
     const reductionPercentage = [10, 25, 50, 75, 100][sabotageLevel - 1];
-    const reducedIncome = targetCompany.incomePerHour * ((100 - reductionPercentage) / 100);
+    const reducedIncome = originalIncomePerHour * ((100 - reductionPercentage) / 100);
+    targetCompany.incomePerHour = reducedIncome;
+    await targetCompany.save();
 
     const owner = await Player.findById(targetCompany.ownerId);
     owner.companyIncome = (await Promise.all(owner.Companies.map(async (companyId) => {
@@ -59,17 +61,18 @@ export const sabotageCompany = async (req, res) => {
         return otherCompany.incomePerHour;
       }
     }))).reduce((acc, income) => acc + income, 0);
-    
+
     owner.totalIncome = owner.baseIncome + owner.companyIncome;
     await owner.save();
 
-
     schedule.scheduleJob(sabotage.expiresAt, async function() {
       const company = await Company.findById(sabotage.targetCompany);
-      const owner = await Player.findById(company.ownerId);
-      owner.companyIncome += company.incomePerHour - reducedIncome;
-      owner.totalIncome = owner.baseIncome + owner.companyIncome;
+      company.incomePerHour = sabotage.originalIncomePerHour;
+      await company.save();
 
+      const owner = await Player.findById(company.ownerId);
+      owner.companyIncome += sabotage.originalIncomePerHour - reducedIncome;
+      owner.totalIncome = owner.baseIncome + owner.companyIncome;
       await owner.save();
     });
 
