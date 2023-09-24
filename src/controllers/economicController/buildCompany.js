@@ -54,6 +54,7 @@ export const buildCompany = async (req, res) => {
       protectionPrices: companyDetails.protectionPrices[0],
       protectionLevel: companyDetails.protectionLevel[0],
       protectionCost: companyDetails.protectionCost[0],
+      sabotageCost: companyDetails.sabotageCost
     });
 
     await newCompany.save();

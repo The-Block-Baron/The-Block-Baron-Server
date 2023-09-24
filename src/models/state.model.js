@@ -14,6 +14,7 @@ const companyDetailsSchema = new Schema({
   protectionPrices: [Schema.Types.Mixed],
   protectionLevel: [Number],
   protectionCost: [Schema.Types.Mixed],
+  sabotageCost: [Number],
   closeCost: Number
 }, { _id: false });
 

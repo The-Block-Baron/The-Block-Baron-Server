@@ -63,6 +63,10 @@ const companySchema = new Schema({
   state: {  
     type: Schema.Types.ObjectId,
     ref: 'State'
+  },
+  sabotageCost: {
+    type: [Number],
+    required: true
   }
 });
 
