@@ -5,7 +5,7 @@ import Sabotage from '../../models/sabotage.model.js';
 
 export const sabotageCompany = async (req, res) => {
   try {
-    const { companyId, playerId } = req.params;
+    const { companyId, id: playerId } = req.params;
     const { sabotageLevel } = req.body;
     const { role, id: userId } = req.user;
 
@@ -25,6 +25,9 @@ export const sabotageCompany = async (req, res) => {
     }
 
     const sabotageCost = targetCompany.sabotageCost[sabotageLevel - 1]; 
+
+    console.log('sabotageCost:', sabotageCost);
+
 
     if (role !== 'admin' && saboteur.inGameTokens < sabotageCost) {
       return res.status(400).json({ error: 'Not enough tokens' });
