@@ -64,6 +64,7 @@ export const adminRegister = async (req, res) => {
 
 
 // Admin Login logic
+// Admin Login logic
 export const adminLogin = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -89,6 +90,9 @@ export const adminLogin = async (req, res) => {
 
     const token = jwt.sign(adminForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    res.status(200).json({ admin, token });
+    // Set HttpOnly cookie
+    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
+
+    res.status(200).json({ admin });
     console.log('Admin login successful');
 };

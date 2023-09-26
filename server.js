@@ -26,7 +26,21 @@ const port = PORT || 2100;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
-app.use(cors());
+
+const allowedOrigins = ['http://localhost:5173', 'file://'];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
+  app.use(cors(corsOptions));
+
+
 app.use(compression());
 app.use(morgan('dev'));
 
