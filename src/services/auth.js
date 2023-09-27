@@ -16,10 +16,10 @@ export const validateLogin = [
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
 ];
 
-// Initialize dotenv
+
 dotenv.config();
 
-// Player Registration logic
+
 export const register = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -28,13 +28,11 @@ export const register = async (req, res) => {
 
     const { username, email, password } = req.body;
 
-    // Verificar si el email ya existe en los registros de Player
     const existingPlayer = await Player.findOne({ email });
     if (existingPlayer) {
         return res.status(400).json({ message: 'Email already in use by another player' });
     }
 
-    // Verificar si el email ya existe en los registros de Admin
     const existingAdmin = await Admin.findOne({ email });
     if (existingAdmin) {
         return res.status(400).json({ message: 'Email already in use by an admin' });
@@ -48,18 +46,13 @@ export const register = async (req, res) => {
 
     try {
         const savedPlayer = await player.save();
-        const playerForToken = {
-            id: savedPlayer._id,
-            username: savedPlayer.username,
-        };
-        
-        const token = jwt.sign(playerForToken, process.env.JWT_SECRET, { expiresIn: '48h' });
-        res.status(201).json({ player: savedPlayer, token });
+        res.status(201).json({ player: savedPlayer });
     } catch (error) {
         console.error(error);
         res.status(400).json({ message: error.message });
     }
 };
+
 
 
 
@@ -90,6 +83,8 @@ export const login = async (req, res) => {
 
     const token = jwt.sign(playerForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    res.status(200).json({ player, token });
+    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
+
+    res.status(200).json({ player });
     console.log('Login successful');
 };
