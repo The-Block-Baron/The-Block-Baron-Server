@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
 
 import './src/scripts/updateTokens.js'
 console.log("Script de updateTokens importado");
@@ -40,7 +41,7 @@ const corsOptions = {
 };
   app.use(cors(corsOptions));
 
-
+app.use(cookieParser())
 app.use(compression());
 app.use(morgan('dev'));
 
