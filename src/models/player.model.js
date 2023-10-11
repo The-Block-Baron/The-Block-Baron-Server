@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
 
 const Schema = mongoose.Schema;
 
@@ -11,14 +10,12 @@ const playerSchema = new Schema({
         trim: true,
         minlength: 3
     },
-    email: {
+    walletAddress: {
         type: String,
         required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
+        unique: true,
+        minlength: 42,
+        maxlength: 42
     },
     baseIncome: {
         type: Number,
@@ -51,15 +48,7 @@ playerSchema.virtual('totalIncome').get(function() {
     return this.baseIncome + this.companyIncome;
 });
 
-playerSchema.pre('save', async function(next) {
-    if (this.isModified('password') || this.isNew) {
-        const saltRounds = 10;
-        this.password = await bcrypt.hash(this.password, saltRounds);
-    }
-    next();
-});
-
-playerSchema.index({ username: 1, email: 1 });
+playerSchema.index({ username: 1, walletAddress: 1 });
 
 const Player = mongoose.model('Player', playerSchema);
 
