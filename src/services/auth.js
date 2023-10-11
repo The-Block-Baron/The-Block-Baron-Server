@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { body, validationResult } from 'express-validator';
+import { BlacklistedToken } from '../models/blacklist.model.js';
 
 // Validation middleware
 export const validateRegistration = [
@@ -55,9 +56,6 @@ export const register = async (req, res) => {
 
 
 
-
-
-
 export const login = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -78,7 +76,8 @@ export const login = async (req, res) => {
 
     const playerForToken = {
         id: player._id,
-        username: player.username
+        username: player.username,
+        email: player.email
     };
 
     const token = jwt.sign(playerForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -88,3 +87,65 @@ export const login = async (req, res) => {
     res.status(200).json({ player });
     console.log('Login successful');
 };
+
+
+export const logout = async (req, res) => {
+    console.log('Logout route hit')
+    const token = req.cookies.token;
+      
+    if (token) {
+      res.clearCookie('token');
+        
+      try {
+        const blacklistedToken = new BlacklistedToken({ token });
+        await blacklistedToken.save();
+        res.status(200).json({ message: 'Logged out successfully' });
+      } catch (error) {
+        console.error('Error blacklisting token:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+      }
+    } else {
+      res.status(200).json({ message: 'Logged out successfully' });
+    }
+}
+
+
+export const isAuthenticated = async (req, res) => {
+    const token = req.cookies.token;
+  
+    if (!token) {
+      return res.json({ isAuthenticated: false });
+    }
+  
+    const isBlacklisted = await BlacklistedToken.findOne({ token });
+    if (isBlacklisted) {
+      return res.json({ isAuthenticated: false });
+    }
+  
+    try {
+      jwt.verify(token, process.env.JWT_SECRET);
+      res.json({ isAuthenticated: true });
+    } catch (error) {
+      res.json({ isAuthenticated: false });
+    }
+  }
+
+
+
+export const playerDetails = async (req, res) => {
+    const token = req.cookies.token;
+    
+    if (!token) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const playerEmail = decoded.email;
+      
+      res.json({ email: playerEmail });
+    } catch (error) {
+      res.status(401).json({ message: 'Unauthorized' });
+    }
+}
+

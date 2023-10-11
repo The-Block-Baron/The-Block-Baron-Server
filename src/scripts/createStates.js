@@ -24,6 +24,10 @@ async function createStates() {
     // Create new State data
     const statesData = [
       Adventure,
+      Adventure,
+      Adventure,
+      Adventure,
+      Adventure,
       // Fortune,
       // Harmony,
       // Valor,
