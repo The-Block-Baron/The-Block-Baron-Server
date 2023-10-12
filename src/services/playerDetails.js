@@ -12,10 +12,10 @@ export const playerDetails = async (req, res) => {
   
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const playerWalletAddress = decoded.walletAddress;
-    const playerName = decoded.username;
+    const userWalletAddress = decoded.walletAddress;
+    const userName = decoded.username;
     
-    res.json({ walletAddress: playerWalletAddress, username: playerName });
+    res.json({ walletAddress: userWalletAddress, username: userName });
   } catch (error) {
     res.status(401).json({ message: 'Unauthorized' });
   }
