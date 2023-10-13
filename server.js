@@ -14,6 +14,7 @@ import playerRoutes from './src/routes/player.routes.js'
 import stateRoutes from './src/routes/state.routes.js'
 import economicRouter from './src/routes/economicAct.routes.js'
 import authRouter from './src/routes/auth.routes.js';
+import userRouter from './src/routes/user.routes.js'
 
 dotenv.config();
 
@@ -60,7 +61,8 @@ app.get('/', () => {
 app.use('/api/v1', playerRoutes)
 app.use('/api/v1', stateRoutes)
 app.use('/api/v1', economicRouter)
-app.use('/auth', authRouter)
+app.use('/api/v1/auth', authRouter)
+app.use('/api/v1', userRouter)
 
 // Middleware para manejar 404
 app.use((req, res, next) => {

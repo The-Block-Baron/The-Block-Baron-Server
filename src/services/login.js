@@ -49,7 +49,9 @@ export const login = async (req, res) => {
       await newRefreshToken.save();
 
       res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 7*24*60*60*1000 });
-      res.status(200).json({ accessToken, user });  // Return user instead of player
+      res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 30*60*1000 });
+
+      res.status(200).json({ user });  // Return user instead of player
 
       console.log('Login successful');
   } catch (error) {
