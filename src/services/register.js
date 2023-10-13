@@ -1,4 +1,3 @@
-import Player from '../models/player.model.js';
 import User from '../models/user.model.js';  // <-- Import User model
 import dotenv from 'dotenv';
 import { body, validationResult } from 'express-validator';

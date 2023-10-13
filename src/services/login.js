@@ -27,7 +27,15 @@ export const login = async (req, res) => {
           return res.status(400).json({ message: 'User not found' });
       }
 
-      const recoveredAddress = ethers.utils.verifyMessage(originalMessage, signedMessage);
+      let recoveredAddress;  // <-- Declara aquí
+
+      try {
+          recoveredAddress =  ethers.verifyMessage(originalMessage, signedMessage);
+      } catch (error) {
+          console.error("Error verifying message:", error);
+          return res.status(500).json({ message: "Error verifying message" });
+      }
+
       if (recoveredAddress.toLowerCase() !== walletAddress.toLowerCase()) {
           return res.status(400).json({ message: 'Signature verification failed' });
       }
