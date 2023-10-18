@@ -1,4 +1,4 @@
-import User from '../models/user.model.js';  // <-- Import User model
+import User from '../models/user.model.js';  
 import dotenv from 'dotenv';
 import { body, validationResult } from 'express-validator';
 
@@ -18,35 +18,37 @@ export const register = async (req, res) => {
 
   const { username, walletAddress, email } = req.body;
 
-
-  const existingUserByWallet = await User.findOne({ walletAddress });
-  if (existingUserByWallet) {
-      return res.status(400).json({ message: 'Wallet address already registered' });
-  }
-
-
-  const existingUserByUsername = await User.findOne({ username });
-  if (existingUserByUsername) {
-      return res.status(400).json({ message: 'Username already taken' });
-  }
-
-
-  const existingUserByEmail = await User.findOne({ email });
-  if (existingUserByEmail) {
-      return res.status(400).json({ message: 'Email already registered' });
-  }
-
-  const user = new User({
-      username,
-      walletAddress,
-      email
-  });
-
   try {
+      const existingUser = await User.findOne({
+          $or: [
+              { walletAddress },
+              { username },
+              { email }
+          ]
+      });
+
+      if (existingUser) {
+          if (existingUser.walletAddress === walletAddress) {
+              return res.status(400).json({ message: 'Wallet address already registered' });
+          }
+          if (existingUser.username === username) {
+              return res.status(400).json({ message: 'Username already taken' });
+          }
+          if (existingUser.email === email) {
+              return res.status(400).json({ message: 'Email already registered' });
+          }
+      }
+
+      const user = new User({
+          username,
+          walletAddress,
+          email
+      });
+
       const savedUser = await user.save();
       res.status(201).json({ user: savedUser });
   } catch (error) {
       console.error(error);
-      res.status(400).json({ message: error.message });
+      res.status(400).json({ message: 'Registration failed. Please try again.' });
   }
 };

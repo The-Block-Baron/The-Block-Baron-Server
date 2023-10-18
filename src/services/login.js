@@ -1,9 +1,8 @@
-import User from '../models/user.model.js';  // Import the User model
+import User from '../models/user.model.js';  
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { body, validationResult } from 'express-validator';
 import { ethers } from 'ethers';
-import RefreshToken from '../models/refreshToken.model.js';
 
 export const validateLogin = [
   body('walletAddress').isString().isLength({ min: 42, max: 42 }).withMessage('Invalid Ethereum wallet address'),
@@ -22,12 +21,12 @@ export const login = async (req, res) => {
 
       const { walletAddress, signedMessage, originalMessage } = req.body;
 
-      const user = await User.findOne({ walletAddress });  // Find the user by wallet address
+      const user = await User.findOne({ walletAddress }); 
       if (!user) {
           return res.status(400).json({ message: 'User not found' });
       }
 
-      let recoveredAddress;  // <-- Declara aquí
+      let recoveredAddress;
 
       try {
           recoveredAddress =  ethers.verifyMessage(originalMessage, signedMessage);
@@ -46,20 +45,11 @@ export const login = async (req, res) => {
           walletAddress: user.walletAddress
       };
 
-      const accessToken = jwt.sign(userForToken, process.env.JWT_SECRET, { expiresIn: '30m' });
-      const refreshToken = jwt.sign(userForToken, process.env.REFRESH_TOKEN_SECRET);
+      const accessToken = jwt.sign(userForToken, process.env.JWT_SECRET, { expiresIn: '24h' });
 
-      const newRefreshToken = new RefreshToken({
-          token: refreshToken,
-          user: user._id,
-          expiryDate: new Date(Date.now() + 7*24*60*60*1000)
-      });
-      await newRefreshToken.save();
+      res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 24*60*60*1000 });
 
-      res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 7*24*60*60*1000 });
-      res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 30*60*1000 });
-
-      res.status(200).json({ user });  // Return user instead of player
+      res.status(200).json({ user });
 
       console.log('Login successful');
   } catch (error) {

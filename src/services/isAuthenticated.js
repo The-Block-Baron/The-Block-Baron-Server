@@ -3,9 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-
 export const isAuthenticated = async (req, res) => {
-  const token = req.cookies.token;
+  const token = req.cookies.accessToken; 
 
   if (!token) {
     return res.json({ isAuthenticated: false });
