@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import Player from '../models/player.model.js';
+import User from '../models/user.model.js';
 
-const playerAuthMiddleware = async (req, res, next) => {
+const userAuthMiddleware = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
@@ -17,15 +17,15 @@ const playerAuthMiddleware = async (req, res, next) => {
     try {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         
-        const player = await Player.findById(decodedToken.id);
+        const user = await User.findById(decodedToken.id);
       
-        if (!player) {
-          return res.status(401).json({ message: 'Player not found' });
+        if (!user) {
+          return res.status(401).json({ message: 'User not found' });
         }
 
         req.user = {
-          role: 'player',
-          id: player._id,
+          role: 'user',
+          id: user._id,
         };
       
         next();
@@ -37,4 +37,4 @@ const playerAuthMiddleware = async (req, res, next) => {
     }
 };
 
-export default playerAuthMiddleware;
+export default userAuthMiddleware;
