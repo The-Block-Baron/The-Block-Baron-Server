@@ -7,17 +7,20 @@ import morgan from 'morgan';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 
-import './src/scripts/updateTokens.js'
-console.log("Script de updateTokens importado");
+
+import https from 'https'
+import fs from 'fs'
 
 import playerRoutes from './src/routes/player.routes.js'
 import stateRoutes from './src/routes/state.routes.js'
 import economicRouter from './src/routes/economicAct.routes.js'
 import authRouter from './src/routes/auth.routes.js';
+import userRouter from './src/routes/user.routes.js'
 
 dotenv.config();
 
 let server;
+
 
 const app = express();
 const { PORT, CONNECTION_URI } = process.env;
@@ -28,7 +31,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 
-const allowedOrigins = ['http://localhost:5173', 'file://'];
+const allowedOrigins = ['https://localhost:5173', 'file://'];
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -45,6 +48,12 @@ app.use(cookieParser())
 app.use(compression());
 app.use(morgan('dev'));
 
+
+const httpsOptions = {
+  key: fs.readFileSync('./key.pem'),
+  cert: fs.readFileSync('./cert.pem')
+}
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('¡Algo salió mal!');
@@ -60,7 +69,8 @@ app.get('/', () => {
 app.use('/api/v1', playerRoutes)
 app.use('/api/v1', stateRoutes)
 app.use('/api/v1', economicRouter)
-app.use('/auth', authRouter)
+app.use('/api/v1/auth', authRouter)
+app.use('/api/v1', userRouter)
 
 // Middleware para manejar 404
 app.use((req, res, next) => {
@@ -86,15 +96,17 @@ const connection = async () => {
 };
 
 export const startServer = async () => {
-    try {
-        console.log("Intentando conectar a MongoDB y arrancar el servidor...");
-        await connection();
-        server = app.listen(port, () => {
-            console.log(`Servidor de Blockchain Baron corriendo en http://localhost:${port} 🔥🎮`);
-        });
-    } catch (error) {
-        console.error('Error al iniciar el servidor:', error.message);
-    }
+  try {
+      console.log("Intentando conectar a MongoDB y arrancar el servidor...");
+      await connection();
+
+      server = https.createServer(httpsOptions, app).listen(port, () => {
+          console.log(`Servidor de Blockchain Baron corriendo en https://localhost:${port} 🔥🎮`);
+      });
+
+  } catch (error) {
+      console.error('Error al iniciar el servidor:', error.message);
+  }
 };
 
 export const stopServer = (callback) => {
